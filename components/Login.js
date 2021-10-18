@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  TextInput,
+  Button,
+} from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -44,6 +51,23 @@ export default function Login({ navigation }) {
         >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
         </Pressable>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            title="MapView"
+            onPress={() => navigation.navigate("MapView")}
+          />
+          <Button
+            title="ListView"
+            onPress={() => navigation.navigate("ListView")}
+          />
+        </View>
       </View>
     </View>
   );
