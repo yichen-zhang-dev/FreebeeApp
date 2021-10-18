@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
-import { faMap, faUsser } from "@fortawesome/free-solid-svg-icons";
+import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function Login() {
+export default function Login({ navigation }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
@@ -23,15 +26,22 @@ export default function Login() {
         </Text>
         <TextInput
           style={[styles.login, styles.loginForm]}
-          defaultValue="Username/Email"
+          placeholder="Username/Email"
+          placeholderTextColor="white"
+          onChangeText={(val) => setUsername(val)}
         />
         <TextInput
           style={[styles.login, styles.loginForm]}
-          defaultValue="Password"
+          placeholder="Password"
+          placeholderTextColor="white"
+          onChangeText={(val) => setPassword(val)}
         />
       </View>
       <View style={{ flex: 1 }}>
-        <Pressable style={styles.loginButton}>
+        <Pressable
+          style={styles.loginButton}
+          onPress={() => navigation.navigate("MapView")}
+        >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
         </Pressable>
       </View>
