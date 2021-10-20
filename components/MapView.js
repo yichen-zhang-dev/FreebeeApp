@@ -5,7 +5,7 @@ import Header from "./Header";
 export default function MapView({ navigation }) {
   return (
     <View style={styles.container}>
-      <Header />
+      <Header ranking={true} navigation={navigation} />
       <View
         style={{
           flex: 5,
