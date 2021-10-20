@@ -6,6 +6,7 @@ import MapView from "./components/MapView";
 import ListView from "./components/ListView";
 import AddGiveawayForm from "./components/AddGiveawayForm";
 import Ranking from "./components/Ranking";
+import AddSubmission from "./components/AddSubmission";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -45,6 +46,11 @@ export default function App() {
         <Stack.Screen
           name="Ranking"
           component={Ranking}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddSubmission"
+          component={AddSubmission}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

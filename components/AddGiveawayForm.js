@@ -95,7 +95,7 @@ export default function AddGiveawayForm({ navigation }) {
       <View style={{ flex: 1 }}>
         <Pressable
           style={styles.buttonContainer}
-          onPress={() => navigation.navigate("MapView")}
+          onPress={() => navigation.navigate("AddSubmission")}
         >
           <Text style={styles.buttonText}>Add Giveaway</Text>
         </Pressable>
