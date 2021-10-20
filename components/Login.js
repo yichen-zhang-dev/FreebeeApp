@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: "black",
-    fontFamily: "monospace",
+    // fontFamily: "monospace",
     fontSize: 45,
   },
   login: {

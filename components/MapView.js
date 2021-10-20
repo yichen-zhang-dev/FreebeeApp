@@ -2,7 +2,7 @@ import React from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import Header from "./Header";
 
-export default function MapView() {
+export default function MapView({ navigation }) {
   return (
     <View style={styles.container}>
       <Header />
@@ -20,7 +20,10 @@ export default function MapView() {
           marginVertical: 24,
         }}
       >
-        <Pressable style={styles.button}>
+        <Pressable
+          style={styles.button}
+          onPress={() => navigation.navigate("AddForm")}
+        >
           <Text style={styles.buttonText}>Add Giveaway</Text>
         </Pressable>
         <Pressable style={styles.button}>

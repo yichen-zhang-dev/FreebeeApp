@@ -4,6 +4,7 @@ import { Settings, StyleSheet, Text, View } from "react-native";
 import Login from "./components/Login";
 import MapView from "./components/MapView";
 import ListView from "./components/ListView";
+import AddGiveawayForm from "./components/AddGiveawayForm";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -33,6 +34,11 @@ export default function App() {
         <Stack.Screen
           name="ListView"
           component={ListView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddForm"
+          component={AddGiveawayForm}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
