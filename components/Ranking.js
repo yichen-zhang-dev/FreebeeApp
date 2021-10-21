@@ -44,8 +44,6 @@ export default function Ranking() {
     );
   };
 
-  console.log(fakeUsers);
-
   return (
     <View style={styles.container}>
       <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 10 }}>

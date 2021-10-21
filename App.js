@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Settings, StyleSheet, Text, View } from "react-native";
 import Login from "./components/Login";
+import SignUp from "./components/SignUp";
 import MapView from "./components/MapView";
 import ListView from "./components/ListView";
 import AddGiveawayForm from "./components/AddGiveawayForm";
@@ -26,6 +27,11 @@ export default function App() {
         <Stack.Screen
           name="Login"
           component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
           options={{ headerShown: false }}
         />
         <Stack.Screen

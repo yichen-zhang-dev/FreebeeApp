@@ -25,12 +25,12 @@ export default function Login({ navigation }) {
       </View>
       <View style={{ flex: 2, justifyContent: "center" }}>
         <Text style={[styles.login, { fontSize: 30, marginBottom: 15 }]}>
-          Log In
+          Sign Up
         </Text>
         <Text style={[styles.login, { fontSize: 16, marginBottom: 15 }]}>
-          DON'T HAVE AN ACOUNT?{" "}
-          <Pressable onPress={() => navigation.navigate("SignUp")}>
-            <Text style={{ textDecorationLine: "underline" }}>SIGN UP</Text>
+          ALREADY HAVE AN ACOUNT?{" "}
+          <Pressable onPress={() => navigation.navigate("Login")}>
+            <Text style={{ textDecorationLine: "underline" }}>LOG IN</Text>
           </Pressable>
         </Text>
         <TextInput
@@ -46,13 +46,20 @@ export default function Login({ navigation }) {
           placeholderTextColor="white"
           onChangeText={(val) => setPassword(val)}
         />
+        <TextInput
+          style={[styles.login, styles.loginForm]}
+          secureTextEntry={true}
+          placeholder="Confirm Password"
+          placeholderTextColor="white"
+          onChangeText={(val) => setPassword(val)}
+        />
       </View>
       <View style={{ flex: 1 }}>
         <Pressable
           style={styles.loginButton}
           onPress={() => navigation.navigate("MapView")}
         >
-          <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
+          <Text style={{ color: "#7BBA83", fontSize: 24 }}>Register</Text>
         </Pressable>
         <View
           style={{
