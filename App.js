@@ -1,13 +1,12 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Settings, StyleSheet, Text, View } from "react-native";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import MapView from "./components/MapView";
 import ListView from "./components/ListView";
 import AddGiveawayForm from "./components/AddGiveawayForm";
 import Ranking from "./components/Ranking";
 import AddSubmission from "./components/AddSubmission";
+import CustomMapView from "./components/CustomMapView";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -36,7 +35,7 @@ export default function App() {
         />
         <Stack.Screen
           name="MapView"
-          component={MapView}
+          component={CustomMapView}
           options={{ headerShown: false }}
         />
         <Stack.Screen
