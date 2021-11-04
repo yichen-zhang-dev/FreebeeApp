@@ -6,14 +6,17 @@ import {
   Pressable,
   TextInput,
   Button,
+  Switch
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
-export default function Login({ navigation }) {
+export default function SignUp({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   return (
     <View style={styles.container}>
@@ -53,11 +56,25 @@ export default function Login({ navigation }) {
           placeholderTextColor="white"
           onChangeText={(val) => setPassword(val)}
         />
+        <Text style={{ color: "white", fontSize: 18 }}> Are you an event organizer? </Text>
+        <Switch
+        style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        trackColor={{ false: "#767577", true: "#81b0ff" }}
+        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isEnabled}
+      />
       </View>
       <View style={{ flex: 1 }}>
         <Pressable
           style={styles.loginButton}
-          onPress={() => navigation.navigate("MapView")}
+          onPress={() => {if (!isEnabled) {navigation.navigate("MapView")} else {navigation.navigate("PlannerInfo")}}}
         >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Register</Text>
         </Pressable>

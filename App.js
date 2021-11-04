@@ -7,6 +7,9 @@ import AddGiveawayForm from "./components/AddGiveawayForm";
 import Ranking from "./components/Ranking";
 import AddSubmission from "./components/AddSubmission";
 import CustomMapView from "./components/CustomMapView";
+import PlannerInfo from "./components/PlannerInfo";
+import PlannerMapView from "./components/PlannerMapView";
+import PlannerAddForm from "./components/PlannerAddForm";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -31,6 +34,21 @@ export default function App() {
         <Stack.Screen
           name="SignUp"
           component={SignUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlannerInfo"
+          component={PlannerInfo}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlannerMapView"
+          component={PlannerMapView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlannerAddForm"
+          component={PlannerAddForm}
           options={{ headerShown: false }}
         />
         <Stack.Screen
