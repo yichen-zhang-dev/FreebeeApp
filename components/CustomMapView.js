@@ -66,7 +66,6 @@ export default class CustomMapView extends Component {
   }
 
   render() {
-    console.log("Refresh");
     return (
       <View style={styles.container}>
         <Header ranking={true} navigation={this.props.navigation} />
