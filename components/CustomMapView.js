@@ -1,9 +1,7 @@
 import React, { useState, Component } from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
 import Header from "./Header";
-import { firebase } from "firebase";
-import { getDatabase, ref, onValue } from "firebase/database";
 
 export default class CustomMapView extends Component {
   constructor(props) {
@@ -11,58 +9,45 @@ export default class CustomMapView extends Component {
     this.state = {
       markers: [],
     };
-    const firebaseConfig = {
-      apiKey: "AIzaSyDUiwY5rcwqjWZ6OCN7-S9iNvzc-AZxbUI",
-      authDomain: "freebeeapp-d0524.firebaseapp.com",
-      databaseURL: "https://freebeeapp-d0524.firebaseio.com",
-      projectId: "freebeeapp-d0524",
-      storageBucket: "freebeeapp-d0524.appspot.com",
-      messagingSenderId: "794231349024",
-      appId: "1:794231349024:ios:28530a78d30a2a2b220145",
-      measurementId: "G-measurement-id",
-    };
-
-    // firebase.initializeApp(firebaseConfig);
   }
 
-  // storeHighScore(userId, score) {
-  //   const db = getDatabase();
-  //   const reference = ref(db, "users/" + userId);
-  //   set(ref(db, "users/" + userId), {
-  //     highscore: score,
-  //   });
-  // }
-
-  addMarker(event) {
-    // console.log(event.coordinate)
-    var coordinates = event.coordinate;
-    // console.log("markers", this.state.markers)
-
-    // console.log(event.action)
-    if (event.action != "marker-press") {
-      this.setState({
-        markers: [
-          ...this.state.markers,
-          { latitude: coordinates.latitude, longitude: coordinates.longitude },
-        ],
-      });
-      console.log(
-        this.state.markers.length,
-        coordinates.latitude,
-        coordinates.longitude
-      );
+  needsLocationChange(locationSet, loc) {
+    for (let loc1 of locationSet) {
+      if (
+        Math.abs(loc1.longitude - loc.longitude) < 0.00000000000003 &&
+        Math.abs(loc1.latitude - loc.latitude) < 0.00000000000003
+      ) {
+        return true;
+      }
     }
+    return false;
   }
 
-  deleteMarker(coordinates, index) {
-    console.log(index, coordinates.latitude, coordinates.longitude, "<Delete>");
-    var temp = [...this.state.markers];
-    temp.splice(index, 1);
-    this.setState({
-      markers: temp,
+  populateData() {
+    let updatedGiveaways = [];
+    this.props.db.collection("giveaways").onSnapshot((querySnapshot) => {
+      let locationSet = new Set();
+      querySnapshot.forEach((doc) => {
+        let loc = doc.data().location;
+        while (this.needsLocationChange(locationSet, loc)) {
+          loc.longitude +=
+            Math.random() * 0.0001 * (Math.random() < 0.5 ? -1 : 1);
+          loc.latitude +=
+            Math.random() * 0.0001 * (Math.random() < 0.5 ? -1 : 1);
+        }
+        locationSet.add(loc);
+        updatedGiveaways.push({
+          id: doc.id,
+          type: doc.data().type,
+          location: loc,
+        });
+      });
+      this.setState({ markers: updatedGiveaways });
     });
-    // console.log("post-delete", this.state.markers)
-    // console.log(this.state.markers)
+  }
+
+  componentDidMount() {
+    this.populateData();
   }
 
   render() {
@@ -79,30 +64,30 @@ export default class CustomMapView extends Component {
           <MapView
             style={{ ...StyleSheet.absoluteFillObject }}
             initialRegion={{
-              latitude: 33.7872131,
-              longitude: -84.381931,
+              latitude: 33.77465054971255,
+              longitude: -84.39637973754529,
               latitudeDelta: 0.005,
               longitudeDelta: 0.005,
             }}
-            onPress={(event) => this.addMarker(event.nativeEvent)}
+            // onPress={(event) => this.addMarker(event.nativeEvent)}
           >
-            <Marker
-              coordinate={{ latitude: 33.7872131, longitude: -84.381931 }}
-              title="GT VSA Giveaway"
-              description="This is where the magic happens!"
-            />
-
             {this.state.markers.map((marker, index) => (
               <Marker
                 key={index}
                 coordinate={{
-                  latitude: marker.latitude,
-                  longitude: marker.longitude,
+                  latitude: marker.location.latitude,
+                  longitude: marker.location.longitude,
                 }}
-                onPress={(event) =>
-                  this.deleteMarker(event.nativeEvent.coordinate, index)
-                }
-              />
+                title={"GT event "}
+              >
+                <Callout>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ alignSelf: "center" }}>GT event</Text>
+                    <Text>ID: {marker.id}</Text>
+                    <Text>Type: {marker.type}</Text>
+                  </View>
+                </Callout>
+              </Marker>
             ))}
           </MapView>
         </View>

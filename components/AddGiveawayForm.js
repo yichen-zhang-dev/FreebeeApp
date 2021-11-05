@@ -14,10 +14,14 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
 
-export default function AddGiveawayForm({ navigation }) {
+export default function AddGiveawayForm({ navigation, db }) {
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
+  // const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+
+  const [giveawayType, setGiveawayType] = useState("");
+  const [giveawayLocation, setGiveawayLocation] = useState("");
+  const [image, setImage] = useState(null);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -32,12 +36,8 @@ export default function AddGiveawayForm({ navigation }) {
     "hand-sanitizer",
     "other",
   ];
-
   const locations = ["CULC", "CRC"];
-
   const target = ["All students", "CS majors"];
-
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -59,12 +59,40 @@ export default function AddGiveawayForm({ navigation }) {
       quality: 1,
     });
 
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
     }
   };
+
+  function handleSubmission() {
+    if (date < new Date()) {
+      console.log("Invalid date!");
+    }
+
+    if (giveawayType === "" || giveawayLocation === "") {
+      console.log("Empty mandatory fields!");
+      return;
+    }
+
+    // Geolocation.getCurrentPosition((info) => console.log(info));
+    let longitude;
+    let latitude;
+    if (giveawayLocation == "CULC") {
+      latitude = 33.77465054971255;
+      longitude = -84.39637973754529;
+    } else {
+      latitude = 33.77560635846814;
+      longitude = -84.40390882992358;
+    }
+
+    db.collection("giveaways").add({
+      type: giveawayType,
+      location: { longitude: longitude, latitude: latitude },
+      date: date,
+    });
+
+    navigation.navigate("AddSubmission");
+  }
 
   return (
     <View style={styles.container}>
@@ -80,7 +108,7 @@ export default function AddGiveawayForm({ navigation }) {
           <SelectDropdown
             data={types}
             onSelect={(selectedItem) => {
-              console.log(selectedItem);
+              setGiveawayType(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
@@ -91,8 +119,8 @@ export default function AddGiveawayForm({ navigation }) {
           </Text>
           <SelectDropdown
             data={locations}
-            onSelect={(selectedItem) => {
-              console.log(selectedItem);
+            onSelect={(loc) => {
+              setGiveawayLocation(loc);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
@@ -137,10 +165,7 @@ export default function AddGiveawayForm({ navigation }) {
         </View>
       </View>
       <View style={{ flex: 1 }}>
-        <Pressable
-          style={styles.buttonContainer}
-          onPress={() => navigation.navigate("AddSubmission")}
-        >
+        <Pressable style={styles.buttonContainer} onPress={handleSubmission}>
           <Text style={styles.buttonText}>Add Giveaway</Text>
         </Pressable>
       </View>
