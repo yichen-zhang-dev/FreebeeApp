@@ -6,17 +6,45 @@ import {
   Pressable,
   TextInput,
   Button,
+  Modal,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
+import firebase from "firebase";
+
 export default function Login({ navigation }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+
+  function handleLogin() {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        navigation.navigate("MapView");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+      });
+  }
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          this.setModalVisible(!modalVisible);
+        }}
+      ></Modal>
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <Text style={styles.appTitle}>FREEBEE</Text>
       </View>
@@ -35,9 +63,11 @@ export default function Login({ navigation }) {
         </Text>
         <TextInput
           style={[styles.login, styles.loginForm]}
-          placeholder="Username/Email"
+          placeholder="Email"
           placeholderTextColor="white"
-          onChangeText={(val) => setUsername(val)}
+          onChangeText={(val) => setEmail(val)}
+          autoCorrect={false}
+          autoCapitalize={"none"}
         />
         <TextInput
           style={[styles.login, styles.loginForm]}
@@ -45,13 +75,12 @@ export default function Login({ navigation }) {
           placeholder="Password"
           placeholderTextColor="white"
           onChangeText={(val) => setPassword(val)}
+          autoCorrect={false}
+          autoCapitalize={"none"}
         />
       </View>
       <View style={{ flex: 1 }}>
-        <Pressable
-          style={styles.loginButton}
-          onPress={() => navigation.navigate("MapView")}
-        >
+        <Pressable style={styles.loginButton} onPress={handleLogin}>
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
         </Pressable>
         <View

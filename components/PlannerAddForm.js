@@ -14,14 +14,10 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
 
-export default function AddGiveawayForm({ navigation, db }) {
+export default function PlannerAddGiveaway({ navigation }) {
   const [date, setDate] = useState(new Date());
-  // const [mode, setMode] = useState("date");
+  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
-
-  const [giveawayType, setGiveawayType] = useState("");
-  const [giveawayLocation, setGiveawayLocation] = useState("");
-  const [image, setImage] = useState(null);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -36,8 +32,14 @@ export default function AddGiveawayForm({ navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
+
   const locations = ["CULC", "CRC"];
+
   const target = ["All students", "CS majors"];
+
+  const [image, setImage] = useState(null);
+
+  const [clubInfo, setClubInfo] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -59,40 +61,12 @@ export default function AddGiveawayForm({ navigation, db }) {
       quality: 1,
     });
 
+    console.log(result);
+
     if (!result.cancelled) {
       setImage(result.uri);
     }
   };
-
-  function handleSubmission() {
-    if (date < new Date()) {
-      console.log("Invalid date!");
-    }
-
-    if (giveawayType === "" || giveawayLocation === "") {
-      console.log("Empty mandatory fields!");
-      return;
-    }
-
-    // Geolocation.getCurrentPosition((info) => console.log(info));
-    let longitude;
-    let latitude;
-    if (giveawayLocation == "CULC") {
-      latitude = 33.77465054971255;
-      longitude = -84.39637973754529;
-    } else {
-      latitude = 33.77560635846814;
-      longitude = -84.40390882992358;
-    }
-
-    db.collection("giveaways").add({
-      type: giveawayType,
-      location: { longitude: longitude, latitude: latitude },
-      date: date,
-    });
-
-    navigation.navigate("AddSubmission");
-  }
 
   return (
     <View style={styles.container}>
@@ -108,7 +82,7 @@ export default function AddGiveawayForm({ navigation, db }) {
           <SelectDropdown
             data={types}
             onSelect={(selectedItem) => {
-              setGiveawayType(selectedItem);
+              console.log(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
@@ -119,8 +93,8 @@ export default function AddGiveawayForm({ navigation, db }) {
           </Text>
           <SelectDropdown
             data={locations}
-            onSelect={(loc) => {
-              setGiveawayLocation(loc);
+            onSelect={(selectedItem) => {
+              console.log(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
@@ -151,6 +125,7 @@ export default function AddGiveawayForm({ navigation, db }) {
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
         </View>
+        
         <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
@@ -163,9 +138,23 @@ export default function AddGiveawayForm({ navigation, db }) {
             />
           )}
         </View>
+        <View style={styles.container}>
+        <Text style={styles.dropdownTitle}>
+            Info about giveaway: <Text style={{ color: "red" }}>*</Text>
+          </Text>
+        <TextInput style={styles.textForm}
+            multiline={true}
+            numberOfLines={4}
+            onChangeText={(text) => setClubInfo(text)}
+            />
+        </View>
       </View>
+      
       <View style={{ flex: 1 }}>
-        <Pressable style={styles.buttonContainer} onPress={handleSubmission}>
+        <Pressable
+          style={styles.buttonContainer}
+          onPress={() => navigation.navigate("PlannerMapView")}
+        >
           <Text style={styles.buttonText}>Add Giveaway</Text>
         </Pressable>
       </View>
@@ -199,4 +188,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 66,
   },
+  textForm: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    marginBottom: 8,
+    width: 300,
+  }
 });
