@@ -6,7 +6,7 @@ import {
   Pressable,
   TextInput,
   Button,
-  Switch
+  Switch,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +18,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   function handleSignup() {
     firebase
@@ -44,61 +44,79 @@ export default function Login({ navigation }) {
         <FontAwesomeIcon icon={faMap} size={96} />
       </View>
       <View style={{ flex: 2, justifyContent: "center" }}>
-        <Text style={[styles.login, { fontSize: 30, marginBottom: 15 }]}>
-          Sign Up
-        </Text>
-        <Text style={[styles.login, { fontSize: 16, marginBottom: 15 }]}>
-          ALREADY HAVE AN ACOUNT?{" "}
-          <Pressable onPress={() => navigation.navigate("Login")}>
-            <Text style={{ textDecorationLine: "underline" }}>LOG IN</Text>
-          </Pressable>
-        </Text>
-        <TextInput
-          style={[styles.login, styles.loginForm]}
-          placeholder="Email"
-          placeholderTextColor="white"
-          onChangeText={(val) => setEmail(val)}
-          autoCorrect={false}
-          autoCapitalize={"none"}
-        />
-        <TextInput
-          style={[styles.login, styles.loginForm]}
-          secureTextEntry={true}
-          placeholder="Password"
-          placeholderTextColor="white"
-          onChangeText={(val) => setPassword(val)}
-          autoCorrect={false}
-          autoCapitalize={"none"}
-        />
-        <TextInput
-          style={[styles.login, styles.loginForm]}
-          secureTextEntry={true}
-          placeholder="Confirm Password"
-          placeholderTextColor="white"
-          onChangeText={(val) => setPassword(val)}
-          autoCorrect={false}
-          autoCapitalize={"none"}
-        />
-        <Text style={{ color: "white", fontSize: 18 }}> Are you an event organizer? </Text>
-        <Switch
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
+        <View style={{ flex: 4 }}>
+          <Text style={[styles.login, { fontSize: 30, marginBottom: 15 }]}>
+            Sign Up
+          </Text>
+          <Text style={[styles.login, { fontSize: 16, marginBottom: 15 }]}>
+            ALREADY HAVE AN ACOUNT?{" "}
+            <Pressable onPress={() => navigation.navigate("Login")}>
+              <Text style={{ textDecorationLine: "underline" }}>LOG IN</Text>
+            </Pressable>
+          </Text>
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            placeholder="Email"
+            placeholderTextColor="white"
+            onChangeText={(val) => setEmail(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            secureTextEntry={true}
+            placeholder="Password"
+            placeholderTextColor="white"
+            onChangeText={(val) => setPassword(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            secureTextEntry={true}
+            placeholder="Confirm Password"
+            placeholderTextColor="white"
+            onChangeText={(val) => setPassword(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 19 }}>
+            {" "}
+            Are you an event organizer?{" "}
+          </Text>
+          <Switch
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            trackColor={{ false: "#767577", true: "#151E3F" }}
+            thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        </View>
       </View>
       <View style={{ flex: 1 }}>
         <Pressable
           style={styles.loginButton}
-          onPress={() => {handleSignup(); if (!isEnabled) {navigation.navigate("MapView")} else {navigation.navigate("PlannerInfo")}}}
-        > 
+          onPress={() => {
+            handleSignup();
+            if (!isEnabled) {
+              navigation.navigate("MapView");
+            } else {
+              navigation.navigate("PlannerInfo");
+            }
+          }}
+        >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Register</Text>
         </Pressable>
         <View
