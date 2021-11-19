@@ -37,8 +37,7 @@ export default function Ranking() {
     return (
       <TouchableOpacity style={[styles.listItem, { backgroundColor: color }]}>
         <Text style={styles.userTitle}>
-          {user.index + 1}
-          {"."} {user.item.name}
+          {user.index + 1 + "." + user.item.name}
         </Text>
       </TouchableOpacity>
     );
@@ -50,7 +49,11 @@ export default function Ranking() {
         <Text style={{ fontSize: 45 }}>LEADERBOARD</Text>
       </View>
       <View style={{ flex: 6 }}>
-        <FlatList data={fakeUsers} renderItem={renderUser} />
+        <FlatList
+          data={fakeUsers}
+          renderItem={renderUser}
+          keyExtractor={(user) => user.name}
+        />
       </View>
     </View>
   );

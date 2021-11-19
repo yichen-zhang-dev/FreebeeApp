@@ -111,7 +111,7 @@ export default function Login({ navigation }) {
         <Pressable style={styles.loginButton} onPress={handleLogin}>
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
         </Pressable>
-        {/* <View
+        <View
           style={{
             flex: 1,
             flexDirection: "row",
@@ -127,7 +127,7 @@ export default function Login({ navigation }) {
             title="ListView"
             onPress={() => navigation.navigate("ListView")}
           />
-        </View> */}
+        </View>
       </View>
     </View>
   );
