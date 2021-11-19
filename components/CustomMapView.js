@@ -85,6 +85,11 @@ export default class CustomMapView extends Component {
                     <Text style={{ alignSelf: "center" }}>GT event</Text>
                     <Text>ID: {marker.id}</Text>
                     <Text>Type: {marker.type}</Text>
+                    <Pressable style={styles.removeButton}>
+                      <Text style={styles.removeButtonText}>
+                        Remove Giveaway
+                      </Text>
+                    </Pressable>
                   </View>
                 </Callout>
               </Marker>
@@ -102,9 +107,6 @@ export default class CustomMapView extends Component {
             onPress={() => this.props.navigation.navigate("AddForm")}
           >
             <Text style={styles.buttonText}>Add Giveaway</Text>
-          </Pressable>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Remove Giveaway</Text>
           </Pressable>
         </View>
       </View>
@@ -128,6 +130,20 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   buttonText: {
+    color: "white",
+    fontSize: 16,
+    paddingVertical: 12,
+  },
+  removeButton: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#7BBA83",
+    borderRadius: 8,
+    width: 150,
+    alignSelf: "center",
+  },
+  removeButtonText: {
     color: "white",
     fontSize: 16,
     paddingVertical: 12,
