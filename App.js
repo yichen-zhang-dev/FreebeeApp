@@ -13,6 +13,8 @@ import PlannerAddForm from "./components/PlannerAddForm";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { ToastProvider } from "react-native-toast-notifications";
+
 import firebase from "firebase";
 
 import Constants from "expo-constants";
@@ -105,56 +107,58 @@ export default function App() {
   // }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="MapView" options={{ headerShown: false }}>
-          {(props) => <CustomMapView {...props} db={db} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="PlannerInfo"
-          component={PlannerInfo}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PlannerMapView"
-          component={PlannerMapView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PlannerAddForm"
-          component={PlannerAddForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ListView"
-          component={ListView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="AddForm" options={{ headerShown: false }}>
-          {(props) => <AddGiveawayForm {...props} db={db} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="Ranking"
-          component={Ranking}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AddSubmission"
-          component={AddSubmission}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ToastProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="MapView" options={{ headerShown: false }}>
+            {(props) => <CustomMapView {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="PlannerInfo"
+            component={PlannerInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerMapView"
+            component={PlannerMapView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerAddForm"
+            component={PlannerAddForm}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ListView"
+            component={ListView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="AddForm" options={{ headerShown: false }}>
+            {(props) => <AddGiveawayForm {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Ranking"
+            component={Ranking}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="AddSubmission"
+            component={AddSubmission}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ToastProvider>
   );
 }
 

@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "react-native-toast-notifications";
 
 import firebase from "firebase";
 
@@ -18,6 +19,7 @@ export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const toast = useToast();
 
   function handleLogin() {
     firebase
@@ -30,7 +32,13 @@ export default function Login({ navigation }) {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
+        toast.show("User not found", {
+          type: "danger",
+          placement: "bottom",
+          duration: 500,
+          offset: 0,
+          animationType: "slide-in",
+        });
       });
   }
 
@@ -83,7 +91,7 @@ export default function Login({ navigation }) {
         <Pressable style={styles.loginButton} onPress={handleLogin}>
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Log in</Text>
         </Pressable>
-        <View
+        {/* <View
           style={{
             flex: 1,
             flexDirection: "row",
@@ -99,7 +107,7 @@ export default function Login({ navigation }) {
             title="ListView"
             onPress={() => navigation.navigate("ListView")}
           />
-        </View>
+        </View> */}
       </View>
     </View>
   );
@@ -123,7 +131,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   loginForm: {
-    width: 200,
+    width: 230,
     borderBottomWidth: 1,
     borderColor: "white",
     fontSize: 20,
