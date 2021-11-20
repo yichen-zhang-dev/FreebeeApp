@@ -159,7 +159,7 @@ export default function App() {
           <Stack.Screen
             name="Ranking"
             component={Ranking}
-            options={{ headerShown: false }}
+            options={{ title: "Leaderboard" }}
           />
           <Stack.Screen
             name="AddSubmission"
@@ -172,11 +172,11 @@ export default function App() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#7BBA83",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#7BBA83",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+// });
