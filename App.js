@@ -129,7 +129,11 @@ export default function App() {
           />
           <Stack.Screen
             name="MapView"
-            options={{ title: "Home", headerBackVisible: false }}
+            options={{
+              title: "Home",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
           >
             {(props) => <CustomMapView {...props} db={db} />}
           </Stack.Screen>
@@ -164,7 +168,11 @@ export default function App() {
           <Stack.Screen
             name="AddSubmission"
             component={AddSubmission}
-            options={{ title: "Submission Rewards", headerBackVisible: false }}
+            options={{
+              title: "Submission Rewards",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
