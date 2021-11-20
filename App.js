@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Settings, StyleSheet, Text, View } from "react-native";
+import { Settings, StyleSheet, Text, View, StatusBar } from "react-native";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import ListView from "./components/ListView";
@@ -109,6 +109,13 @@ export default function App() {
   return (
     <ToastProvider>
       <NavigationContainer>
+        <StatusBar
+          animated={true}
+          backgroundColor="#61dafb"
+          barStyle={"dark-content"}
+          showHideTransition={"fade"}
+          hidden={"false"}
+        />
         <Stack.Navigator>
           <Stack.Screen
             name="Login"
