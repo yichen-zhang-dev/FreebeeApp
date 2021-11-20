@@ -75,8 +75,6 @@ export default class CustomMapView extends Component {
   };
 
   render() {
-    console.log("render: ");
-    console.log("\tnumber of items: " + this.state.markers.length);
     return (
       <View style={styles.container}>
         <Header ranking={true} navigation={this.props.navigation} />

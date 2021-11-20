@@ -127,7 +127,10 @@ export default function App() {
             component={SignUp}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="MapView" options={{ headerShown: false }}>
+          <Stack.Screen
+            name="MapView"
+            options={{ title: "Home", headerBackVisible: false }}
+          >
             {(props) => <CustomMapView {...props} db={db} />}
           </Stack.Screen>
           <Stack.Screen
@@ -150,7 +153,7 @@ export default function App() {
             component={ListView}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="AddForm" options={{ headerShown: false }}>
+          <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
             {(props) => <AddGiveawayForm {...props} db={db} />}
           </Stack.Screen>
           <Stack.Screen
@@ -161,7 +164,7 @@ export default function App() {
           <Stack.Screen
             name="AddSubmission"
             component={AddSubmission}
-            options={{ headerShown: false }}
+            options={{ title: "Submission Rewards", headerBackVisible: false }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -5,7 +5,7 @@ import { faMap, faTrophy } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header({ ranking = false, navigation }) {
   return (
-    <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    <View style={{ flex: 1, justifyContent: "center" }}>
       <Text style={styles.appTitle}>
         FREEBEE
         <FontAwesomeIcon style={{ marginLeft: 24 }} icon={faMap} size={42} />
