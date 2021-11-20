@@ -1,7 +1,11 @@
 import React, { useState, Component } from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
+
 import Header from "./Header";
+import DrawerNavigation from "./DrawerNavigation";
+
+// const Drawer = createDrawerNavigator();
 
 export default class CustomMapView extends Component {
   constructor(props) {
@@ -77,7 +81,7 @@ export default class CustomMapView extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Header ranking={true} navigation={this.props.navigation} />
+        <Header ranking={false} navigation={this.props.navigation} />
         <View
           style={{
             flex: 5,
@@ -85,6 +89,7 @@ export default class CustomMapView extends Component {
             width: "100%",
           }}
         >
+          {/* <DrawerNavigation /> */}
           <MapView
             style={{ ...StyleSheet.absoluteFillObject }}
             initialRegion={{
@@ -131,7 +136,7 @@ export default class CustomMapView extends Component {
         >
           <Pressable
             style={styles.button}
-            onPress={() => this.props.navigation.navigate("AddForm")}
+            onPress={() => this.props.navigation.navigate("AddGiveaway")}
           >
             <Text style={styles.buttonText}>Add Giveaway</Text>
           </Pressable>

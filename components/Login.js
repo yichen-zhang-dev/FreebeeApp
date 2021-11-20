@@ -47,7 +47,7 @@ export default function Login({ navigation }) {
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        navigation.navigate("MapView");
+        navigation.navigate("Home");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -119,10 +119,7 @@ export default function Login({ navigation }) {
             alignItems: "center",
           }}
         >
-          <Button
-            title="MapView"
-            onPress={() => navigation.navigate("MapView")}
-          />
+          <Button title="MapView" onPress={() => navigation.navigate("Home")} />
           <Button
             title="ListView"
             onPress={() => navigation.navigate("ListView")}

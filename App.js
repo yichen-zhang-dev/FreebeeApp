@@ -19,6 +19,8 @@ import firebase from "firebase";
 
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DrawerNavigation from "./components/DrawerNavigation";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -74,6 +76,7 @@ const app = !firebase.apps.length
 const db = app.firestore();
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function App() {
   // const [expoPushToken, setExpoPushToken] = useState("");
@@ -117,6 +120,68 @@ export default function App() {
           hidden={"false"}
         />
         <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            options={{
+              headerShown: false,
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          >
+            {(props) => <DrawerNavigation {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="PlannerInfo"
+            component={PlannerInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerMapView"
+            component={PlannerMapView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerAddForm"
+            component={PlannerAddForm}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ListView"
+            component={ListView}
+            options={{ headerShown: false }}
+          />
+          {/* <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
+            {(props) => <AddGiveawayForm {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Ranking"
+            component={Ranking}
+            options={{ title: "Leaderboard" }}
+          />
+          <Stack.Screen
+            name="AddSubmission"
+            component={AddSubmission}
+            options={{
+              title: "Submission Rewards",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          /> */}
+        </Stack.Navigator>
+
+        {/* <DrawerNavigation /> */}
+
+        {/* <Stack.Navigator>
           <Stack.Screen
             name="Login"
             component={Login}
@@ -174,7 +239,7 @@ export default function App() {
               gestureEnabled: false,
             }}
           />
-        </Stack.Navigator>
+        </Stack.Navigator> */}
       </NavigationContainer>
     </ToastProvider>
   );

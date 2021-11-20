@@ -91,7 +91,7 @@ export default function AddGiveawayForm({ navigation, db }) {
       date: date,
     });
 
-    navigation.navigate("AddSubmission");
+    navigation.navigate("Submission");
   }
 
   return (
