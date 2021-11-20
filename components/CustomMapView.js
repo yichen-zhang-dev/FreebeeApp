@@ -23,11 +23,13 @@ export default class CustomMapView extends Component {
     return false;
   }
 
-  populateData() {
-    let updatedGiveaways = [];
+  async populateData() {
     this.props.db.collection("giveaways").onSnapshot((querySnapshot) => {
       let locationSet = new Set();
+      let count = 0;
+      this.setState({ markers: [] });
       querySnapshot.forEach((doc) => {
+        count += 1;
         let loc = doc.data().location;
         while (this.needsLocationChange(locationSet, loc)) {
           loc.longitude +=
@@ -36,13 +38,22 @@ export default class CustomMapView extends Component {
             Math.random() * 0.0001 * (Math.random() < 0.5 ? -1 : 1);
         }
         locationSet.add(loc);
-        updatedGiveaways.push({
-          id: doc.id,
-          type: doc.data().type,
-          location: loc,
+        // updatedGiveaways.push({
+        //   id: doc.id,
+        //   type: doc.data().type,
+        //   location: loc,
+        // });
+        this.setState({
+          markers: [
+            ...this.state.markers,
+            {
+              id: doc.id,
+              type: doc.data().type,
+              location: loc,
+            },
+          ],
         });
       });
-      this.setState({ markers: updatedGiveaways });
     });
   }
 
@@ -50,7 +61,22 @@ export default class CustomMapView extends Component {
     this.populateData();
   }
 
+  handleRemove = (id) => {
+    this.props.db
+      .collection("giveaways")
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Document successfully deleted!");
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
+      });
+  };
+
   render() {
+    console.log("render: ");
+    console.log("\tnumber of items: " + this.state.markers.length);
     return (
       <View style={styles.container}>
         <Header ranking={true} navigation={this.props.navigation} />
@@ -85,7 +111,10 @@ export default class CustomMapView extends Component {
                     <Text style={{ alignSelf: "center" }}>GT event</Text>
                     <Text>ID: {marker.id}</Text>
                     <Text>Type: {marker.type}</Text>
-                    <Pressable style={styles.removeButton}>
+                    <Pressable
+                      style={styles.removeButton}
+                      onPress={() => this.handleRemove(marker.id)}
+                    >
                       <Text style={styles.removeButtonText}>
                         Remove Giveaway
                       </Text>
