@@ -18,12 +18,24 @@ export default function PlannerAddGiveaway({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [counter, setCounter] = useState(0);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
+    if (mode === "date") {
+      showMode("time");
+    }
+    if (mode === "time" && counter === 0) {
+      setCounter(1);
+      showMode("time");
+    } else if (mode === "time" && counter === 1) {
+      setCounter(0);
+
+    }
   };
+  
   const types = [
     "food",
     "phone accessories",
@@ -52,6 +64,13 @@ export default function PlannerAddGiveaway({ navigation }) {
       }
     })();
   }, []);
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   const PickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -103,9 +122,11 @@ export default function PlannerAddGiveaway({ navigation }) {
           <Text style={styles.dropdownTitle}>
             Date: <Text style={{ color: "red" }}>*</Text>
           </Text>
+          <Button onPress={showDatepicker} title="Pick a Time!" />
+          {show && (
           <DateTimePicker
             value={date}
-            mode={"date"}
+            mode={mode}
             display="default"
             onChange={onChange}
             style={{
@@ -113,7 +134,7 @@ export default function PlannerAddGiveaway({ navigation }) {
               alignSelf: "center",
               marginLeft: 30,
             }}
-          />
+          /> )}
         </View>
         <View style={styles.dropdownContainer}>
           <Text style={styles.dropdownTitle}>For:</Text>
@@ -124,19 +145,6 @@ export default function PlannerAddGiveaway({ navigation }) {
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
-        </View>
-        
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
-          <Button title="Upload Photo" onPress={PickImage} />
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
-            />
-          )}
         </View>
         <View style={styles.container}>
         <Text style={styles.dropdownTitle}>
@@ -197,5 +205,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 8,
     width: 300,
+    height: 100,
   }
 });
