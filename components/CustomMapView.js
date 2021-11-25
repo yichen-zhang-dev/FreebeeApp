@@ -4,6 +4,7 @@ import MapView, { Callout, Marker } from "react-native-maps";
 
 import Header from "./Header";
 import DrawerNavigation from "./DrawerNavigation";
+import * as Location from "expo-location";
 
 // const Drawer = createDrawerNavigator();
 
@@ -11,6 +12,10 @@ export default class CustomMapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ready: false,
+      latitude: 0,
+      longitude: 0,
+      coordinates: [],
       markers: [],
     };
   }
@@ -61,7 +66,31 @@ export default class CustomMapView extends Component {
     });
   }
 
+  geoSuccess = (position) => {
+    console.log(position);
+    this.setState({ ready: true });
+    this.setState({ latitude: position.coords.latitude });
+    this.setState({ longitude: position.coords.longitude });
+    console.log(this.state.latitude);
+  };
+
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
+
   componentDidMount() {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    };
+    this.setState({ ready: false });
+    Location.installWebGeolocationPolyfill();
+    navigator.geolocation.getCurrentPosition(
+      this.geoSuccess,
+      this.geoFail,
+      geoOptions
+    );
     this.populateData();
   }
 
@@ -79,6 +108,7 @@ export default class CustomMapView extends Component {
   };
 
   render() {
+    console.log(this.state.markers);
     return (
       <View style={styles.container}>
         <Header ranking={false} navigation={this.props.navigation} />
@@ -92,6 +122,7 @@ export default class CustomMapView extends Component {
           {/* <DrawerNavigation /> */}
           <MapView
             style={{ ...StyleSheet.absoluteFillObject }}
+            showsUserLocation={true}
             initialRegion={{
               latitude: 33.77465054971255,
               longitude: -84.39637973754529,
