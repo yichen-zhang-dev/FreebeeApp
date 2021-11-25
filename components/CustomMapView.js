@@ -2,11 +2,16 @@ import React, { useState, Component } from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import Header from "./Header";
+import * as Location from 'expo-location'
 
 export default class CustomMapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ready: false,
+      latitude: 0,
+      longitude: 0,
+      coordinates: [],
       markers: [],
     };
   }
@@ -47,8 +52,26 @@ export default class CustomMapView extends Component {
   }
 
   componentDidMount() {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    };
+    this.setState({ ready: false });
+    Location.installWebGeolocationPolyfill();
+    navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFail, geoOptions);
     this.populateData();
   }
+  geoSuccess = (position) => {
+    console.log(position);
+    this.setState({ready:true});
+    this.setState({ latitude: position.coords.latitude });
+    this.setState({ longitude: position.coords.longitude });
+    console.log(this.state.latitude);
+  };
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
 
   render() {
     return (
@@ -63,6 +86,7 @@ export default class CustomMapView extends Component {
         >
           <MapView
             style={{ ...StyleSheet.absoluteFillObject }}
+            showsUserLocation={true}
             initialRegion={{
               latitude: 33.77465054971255,
               longitude: -84.39637973754529,
