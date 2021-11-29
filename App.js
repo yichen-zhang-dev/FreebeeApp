@@ -136,10 +136,9 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="ListView"
-          component={ListView}
-          options={{ headerShown: false }}
-        />
+          name="ListView" options={{ headerShown: false }}>
+          {(props) => <ListView {...props} db={db} />}
+        </Stack.Screen>
         <Stack.Screen name="AddForm" options={{ headerShown: false }}>
           {(props) => <AddGiveawayForm {...props} db={db} />}
         </Stack.Screen>

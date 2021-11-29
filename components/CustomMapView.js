@@ -67,7 +67,6 @@ export default class CustomMapView extends Component {
     this.setState({ready:true});
     this.setState({ latitude: position.coords.latitude });
     this.setState({ longitude: position.coords.longitude });
-    console.log(this.state.latitude);
   };
   geoFail = (error) => {
     console.log(error.code, error.message);
