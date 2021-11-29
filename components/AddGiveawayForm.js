@@ -13,6 +13,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+import * as Analytics from 'expo-firebase-analytics';
 
 export default function AddGiveawayForm({ navigation, db }) {
   const [date, setDate] = useState(new Date());
@@ -38,6 +39,9 @@ export default function AddGiveawayForm({ navigation, db }) {
   ];
   const locations = ["CULC", "CRC"];
   const target = ["All students", "CS majors"];
+
+  console.log("calling analytics")
+  Analytics.setCurrentScreen("User Add Giveaway");
 
   useEffect(() => {
     (async () => {

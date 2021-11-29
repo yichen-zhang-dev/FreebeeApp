@@ -8,7 +8,10 @@ import {
 } from "react-native";
 import Header from "./Header";
 
+import * as Analytics from 'expo-firebase-analytics';
+
 export default function ListView() {
+  Analytics.setCurrentScreen("ListView");
   const data = [
     {
       type: "food",

@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 
 import Header from "./Header";
-import DrawerNavigation from "./DrawerNavigation";
+// import DrawerNavigation from "./DrawerNavigation";
 
 // const Drawer = createDrawerNavigator();
 

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
+import * as Analytics from 'expo-firebase-analytics';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 
@@ -20,7 +21,8 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const toast = useToast();
-
+  
+  Analytics.setCurrentScreen("Login");
   function handleLogin() {
     // firebase
     //   .auth()

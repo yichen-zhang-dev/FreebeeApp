@@ -17,7 +17,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.analytics.native",
+      "googleServicesFile": "./analytics/GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,7 +28,18 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyDd0HmURysb-s2S8DU9oqH8NafbAemvyzY",
+          "authDomain": "freebee-22ac9.firebaseapp.com",
+          "projectId": "freebee-22ac9",
+          "storageBucket": "freebee-22ac9.appspot.com",
+          "messagingSenderId": "729239388132",
+          "appId": "1:729239388132:web:5379c961203fdd0afb11f1",
+          "measurementId": "G-T5DGFMK68D",
+        }
+      }
     },
     "plugins": [
       [
