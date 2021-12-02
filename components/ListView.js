@@ -5,9 +5,11 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Header from "./Header";
 import * as Location from 'expo-location'
+
 export default class ListView extends Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,7 @@ export default class ListView extends Component {
       longitude: 0,
       coordinates: [],
       giveaways: [],
+      loading: true,
     };
   }
   
@@ -168,8 +171,8 @@ export default class ListView extends Component {
         });
       });
       let sortedGiveaways = this.mergeSort(updatedGiveaways);
-      console.log(sortedGiveaways);
       this.setState({ giveaways: sortedGiveaways });
+      this.setState({loading:false});
     });
   };
 
@@ -186,14 +189,22 @@ export default class ListView extends Component {
         </TouchableOpacity>
       );
     };
+    if (this.state.loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    } else {
     return (
       <View style={styles.container}>
         <Header />
         <View style={styles.listContainer}>
-          <FlatList data={this.sortedGiveaways} renderItem={renderItem} />
+          <FlatList data={this.state.giveaways} renderItem={renderItem} />
         </View>
       </View>
     );
+    }
   }
 }
 
