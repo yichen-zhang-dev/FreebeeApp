@@ -30,7 +30,7 @@ export default function Login({ navigation, db }) {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        navigation.navigate("MapView");
+        navigation.navigate("Home");
         const uid = firebase.auth().currentUser.uid
         console.log(viewModeListView);
         var mode = "Map View"
@@ -174,7 +174,7 @@ export default function Login({ navigation, db }) {
           onPress={() => {
             handleSignup();
             if (!isEnabled) {
-              navigation.navigate("MapView");
+              navigation.navigate("Home");
             } else {
               navigation.navigate("PlannerInfo");
             }
@@ -192,7 +192,7 @@ export default function Login({ navigation, db }) {
         >
           <Button
             title="MapView"
-            onPress={() => navigation.navigate("MapView")}
+            onPress={() => navigation.navigate("Home")}
           />
           <Button
             title="ListView"
