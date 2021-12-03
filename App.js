@@ -119,12 +119,31 @@ export default function App() {
           showHideTransition={"fade"}
           hidden={"false"}
         />
+<<<<<<< HEAD
         <Stack.Navigator>
         <Stack.Screen name="Login" options={{ headerShown: false }} >
           {(props) => <Login {...props} db={db} />}
         </Stack.Screen> 
         <Stack.Screen name="SignUp" options={{ headerShown: false }}>
           {(props) => <SignUp {...props} db={db} />}
+=======
+        <Stack.Screen
+          name="PlannerMapView"
+          component={PlannerMapView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PlannerAddForm"
+          component={PlannerAddForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ListView" options={{ headerShown: false }}>
+          {(props) => <ListView {...props} db={db} />}
+        </Stack.Screen>
+        <Stack.Screen name="AddForm" options={{ headerShown: false }}>
+          {(props) => <AddGiveawayForm {...props} db={db} />}
+>>>>>>> currentLocation
         </Stack.Screen>
           <Stack.Screen
             name="Home"
