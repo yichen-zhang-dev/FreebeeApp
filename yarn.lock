@@ -4792,7 +4792,6 @@
   "version" "10.2.3"
   dependencies:
     "@expo/config-plugins" "^3.0.0"
-<<<<<<< HEAD
     "expo-modules-core" "~0.2.0"
     "uuid" "7.0.2"
 
@@ -4838,44 +4837,6 @@
   "integrity" "sha512-4N8uoDJwYYXeIH+iGtjA9H6dF4yaEdDyFoYcUbHwsC1MUCL9CquDXpxoO1X2GCBFpwE0kqkyXTOCDqLAQlj5PA=="
   "resolved" "https://registry.npmjs.org/expo-notifications/-/expo-notifications-0.12.3.tgz"
   "version" "0.12.3"
-=======
-    expo-modules-core "~0.2.0"
-    uuid "7.0.2"
-
-expo-keep-awake@~9.2.0:
-  version "9.2.0"
-  resolved "https://registry.npmjs.org/expo-keep-awake/-/expo-keep-awake-9.2.0.tgz"
-  integrity sha512-R5jAx5j3MqrhKFB307FBpaHtYSYeVIFX/rVforBF5inKonYjXRWVhjGoBjolF4geAryNamC3NKhMfxyaaB0W6Q==
-
-expo-location@~12.1.2:
-  version "12.1.3"
-  resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-12.1.3.tgz#307963d02e017f1d217fdee2656b2944850540f5"
-  integrity sha512-Sm/p79Ska4Ie8V2sG5eYECi1000nIm1wirxi/3yErVfZXsxE2KdEmlIN8kVCPqTDskYTol60hVKp/P2teNkyPA==
-  dependencies:
-    "@expo/config-plugins" "^3.0.0"
-    expo-modules-core "~0.2.0"
-
-expo-modules-autolinking@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.npmjs.org/expo-modules-autolinking/-/expo-modules-autolinking-0.0.3.tgz"
-  integrity sha512-azkCRYj/DxbK4udDuDxA9beYzQTwpJ5a9QA0bBgha2jHtWdFGF4ZZWSY+zNA5mtU3KqzYt8jWHfoqgSvKyu1Aw==
-  dependencies:
-    chalk "^4.1.0"
-    commander "^7.2.0"
-    fast-glob "^3.2.5"
-    find-up "~5.0.0"
-    fs-extra "^9.1.0"
-
-expo-modules-core@~0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/expo-modules-core/-/expo-modules-core-0.2.0.tgz"
-  integrity sha512-inpfZ5X/BaTtbj2wG9PA9AC0MN8VyId6KSRlVuEg7+ziurHBy/kKDFxpOddUokhwiln2uhoYPSStJjR/tKypdw==
-
-expo-notifications@~0.12.3:
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/expo-notifications/-/expo-notifications-0.12.3.tgz#19a574a05634540670a69e242de5c8cb3b8d14d5"
-  integrity sha512-4N8uoDJwYYXeIH+iGtjA9H6dF4yaEdDyFoYcUbHwsC1MUCL9CquDXpxoO1X2GCBFpwE0kqkyXTOCDqLAQlj5PA==
->>>>>>> currentLocation
   dependencies:
     "@expo/config-plugins" "^3.0.0"
     "@expo/image-utils" "^0.3.10"

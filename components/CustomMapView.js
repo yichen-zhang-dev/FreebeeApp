@@ -3,14 +3,10 @@ import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 
 import Header from "./Header";
-<<<<<<< HEAD
 import DrawerNavigation from "./DrawerNavigation";
 import * as Location from "expo-location";
 
 // const Drawer = createDrawerNavigator();
-=======
-import * as Location from 'expo-location'
->>>>>>> currentLocation
 
 export default class CustomMapView extends Component {
   constructor(props) {
@@ -90,15 +86,11 @@ export default class CustomMapView extends Component {
     };
     this.setState({ ready: false });
     Location.installWebGeolocationPolyfill();
-<<<<<<< HEAD
     navigator.geolocation.getCurrentPosition(
       this.geoSuccess,
       this.geoFail,
       geoOptions
     );
-=======
-    navigator.geolocation.getCurrentPosition(this.geoSuccess, this.geoFail, geoOptions);
->>>>>>> currentLocation
     this.populateData();
   }
   geoSuccess = (position) => {
