@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from "react-native";
 import Header from "./Header";
 import * as Location from 'expo-location'
@@ -202,7 +203,24 @@ export default class ListView extends Component {
         <View style={styles.listContainer}>
           <FlatList data={this.state.giveaways} renderItem={renderItem} />
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            marginVertical: 24,
+          }}
+        >
+          <Pressable
+            style={styles.button}
+            onPress={() => this.props.navigation.navigate("AddForm")}
+          >
+            <Text style={styles.buttonText}>Add Giveaway</Text>
+          </Pressable>
+          <Pressable style={styles.button}>
+            <Text style={styles.buttonText}>Remove Giveaway</Text>
+          </Pressable>
+        </View>
       </View>
+      
     );
     }
   }
@@ -227,5 +245,18 @@ const styles = StyleSheet.create({
   itemTitle: {
     fontSize: 32,
     color: "black",
+  },
+  button: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#7BBA83",
+    borderRadius: 8,
+    marginHorizontal: 12,
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    paddingVertical: 12,
   },
 });
