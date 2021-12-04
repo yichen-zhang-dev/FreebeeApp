@@ -93,6 +93,15 @@ export default class CustomMapView extends Component {
     );
     this.populateData();
   }
+  geoSuccess = (position) => {
+    console.log(position);
+    this.setState({ready:true});
+    this.setState({ latitude: position.coords.latitude });
+    this.setState({ longitude: position.coords.longitude });
+  };
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
 
   handleRemove = (id) => {
     this.props.db
