@@ -26,19 +26,6 @@ export default function Ranking({ db }) {
         });
         setUsers(topUsers);
       });
-
-    // db.collection("userprofile").onSnapshot((querySnapshot) => {
-    //   let topUsers = [];
-    //   querySnapshot.forEach((doc) => {
-    //     let name = doc.data().first_name + " " + doc.data().last_name;
-    //     let points = doc.data().points;
-    //     topUsers.push({ name: name, points: points });
-    //   });
-    //   topUsers.sort(function (a, b) {
-    //     return b.points - a.points;
-    //   });
-    //   setUsers(topUsers);
-    // });
   }, []);
 
   const renderUser = (user) => {
