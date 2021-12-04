@@ -228,7 +228,9 @@ export default class ListView extends Component {
           >
             <Pressable
               style={styles.button}
-              onPress={() => this.props.navigation.navigate("AddForm")}
+              onPress={() =>
+                this.props.navigation.navigate("AddGiveawayListView")
+              }
             >
               <Text style={styles.buttonText}>Add Giveaway</Text>
             </Pressable>

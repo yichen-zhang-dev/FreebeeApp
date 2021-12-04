@@ -22,26 +22,6 @@ export default function Login({ navigation }) {
   const toast = useToast();
 
   function handleLogin() {
-    // firebase
-    //   .auth()
-    //   .signInWithPopup(new firebase.auth.OAuthProvider("microsoft.com"))
-    //   .then((userCredential) => {
-    //     const user = userCredential.user;
-    //     navigation.navigate("MapView");
-    //   })
-    //   .catch((error) => {
-    //     const errorCode = error.code;
-    //     const errorMessage = error.message;
-    //     console.log(errorCode);
-    //     console.log(errorMessage);
-    //     toast.show("User not found", {
-    //       type: "danger",
-    //       placement: "bottom",
-    //       duration: 500,
-    //       offset: 0,
-    //       animationType: "slide-in",
-    //     });
-    //   });
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)

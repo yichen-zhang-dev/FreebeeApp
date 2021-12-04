@@ -197,7 +197,7 @@ export default class CustomMapView extends Component {
         >
           <Pressable
             style={styles.button}
-            onPress={() => this.props.navigation.navigate("AddGiveaway")}
+            onPress={() => this.props.navigation.navigate("AddGiveawayMapView")}
           >
             <Text style={styles.buttonText}>Add Giveaway</Text>
           </Pressable>

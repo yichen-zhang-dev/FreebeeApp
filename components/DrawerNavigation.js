@@ -15,7 +15,7 @@ import { StyleSheet, Text, View, Pressable } from "react-native";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-const AddSubmissionNavigation = ({ navigation, db }) => {
+const AddSubmissionNavigationMapView = ({ navigation, db }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -26,6 +26,27 @@ const AddSubmissionNavigation = ({ navigation, db }) => {
             <Button
               title="Back"
               onPress={() => navigation.navigate("MapView")}
+            ></Button>
+          ),
+        }}
+      >
+        {(props) => <AddGiveawayForm {...props} db={db} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+};
+
+const AddSubmissionNavigationListView = ({ navigation, db }) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="AddForm"
+        options={{
+          title: "Submit a giveaway",
+          headerLeft: () => (
+            <Button
+              title="Back"
+              onPress={() => navigation.navigate("ListView")}
             ></Button>
           ),
         }}
@@ -73,14 +94,24 @@ export default function DrawerNavigation({ db }) {
       </Drawer.Screen>
       <Drawer.Screen name="User Profile" component={UserProfile} />
       <Drawer.Screen
-        name="AddGiveaway"
+        name="AddGiveawayMapView"
         options={{
           drawerItemStyle: { height: 0 },
           headerShown: false,
           swipeEnabled: false,
         }}
       >
-        {(props) => <AddSubmissionNavigation {...props} db={db} />}
+        {(props) => <AddSubmissionNavigationMapView {...props} db={db} />}
+      </Drawer.Screen>
+      <Drawer.Screen
+        name="AddGiveawayListView"
+        options={{
+          drawerItemStyle: { height: 0 },
+          headerShown: false,
+          swipeEnabled: false,
+        }}
+      >
+        {(props) => <AddSubmissionNavigationListView {...props} db={db} />}
       </Drawer.Screen>
       <Drawer.Screen
         name="Submission"
