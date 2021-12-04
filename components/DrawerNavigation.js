@@ -63,7 +63,9 @@ export default function DrawerNavigation({ db }) {
       >
         {(props) => <CustomMapView {...props} db={db} />}
       </Drawer.Screen>
-      <Drawer.Screen name="Leaderboard" component={Ranking} />
+      <Drawer.Screen name="Leaderboard">
+        {(props) => <Ranking {...props} db={db} />}
+      </Drawer.Screen>
       <Drawer.Screen name="User Profile" component={UserProfile} />
       <Drawer.Screen
         name="AddGiveaway"

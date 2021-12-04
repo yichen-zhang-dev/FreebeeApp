@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,38 +7,38 @@ import {
   FlatList,
 } from "react-native";
 
-export default function Ranking() {
-  const fakeUsers = [
-    { name: "Jonathon Reyna" },
-    { name: "Beulah Hail" },
-    { name: "Lianne Dodd" },
-    { name: "Deanne Dillon" },
-    { name: "Ruth Benitez" },
-    { name: "Tolga Worthington" },
-    { name: "Eleni Cross" },
-    { name: "Baran Salazar" },
-    { name: "Viktor Ray" },
-    { name: "Romany Mccaffrey" },
-    { name: "Gladys Read" },
-    { name: "Franco Mora" },
-    { name: "Syeda Porter" },
-    { name: "Haiden Wallis" },
-    { name: "Eren Barr" },
-    { name: "Elisha Mcgee" },
-    { name: "Curtis Bush" },
-    { name: "Charlotte Cameron" },
-    { name: "Mina Holder" },
-    { name: "Areeb Gomez" },
-  ];
+export default function Ranking({ db }) {
+  const [users, setUsers] = useState({});
+
+  useEffect(() => {
+    db.collection("userprofile").onSnapshot((querySnapshot) => {
+      let topUsers = [];
+      querySnapshot.forEach((doc) => {
+        let name = doc.data().first_name + " " + doc.data().last_name;
+        let points = doc.data().points;
+        topUsers.push({ name: name, points: points });
+      });
+      topUsers.sort(function (a, b) {
+        return b.points - a.points;
+      });
+      setUsers(topUsers);
+    });
+  });
 
   const renderUser = (user) => {
     const colors = ["#0e7049", "#3c8a5d", "#60a472", "#7BBA83"];
     const color = user.index < 3 ? colors[user.index] : colors[3];
     return (
-      <TouchableOpacity style={[styles.listItem, { backgroundColor: color }]}>
-        <Text style={styles.userTitle}>
-          {user.index + 1 + "." + user.item.name}
+      <TouchableOpacity
+        style={[
+          styles.listItem,
+          { flex: 1, flexDirection: "row", backgroundColor: color },
+        ]}
+      >
+        <Text style={styles.userName}>
+          {user.index + 1 + ". " + user.item.name}
         </Text>
+        <Text style={styles.userPoints}>{user.item.points + "pt"}</Text>
       </TouchableOpacity>
     );
   };
@@ -50,7 +50,7 @@ export default function Ranking() {
       </View>
       <View style={{ flex: 6 }}>
         <FlatList
-          data={fakeUsers}
+          data={users}
           renderItem={renderUser}
           keyExtractor={(user) => user.name}
         />
@@ -67,12 +67,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   listItem: {
-    padding: 20,
-    marginVertical: 8,
+    width: 300,
+
+    padding: 16,
+    marginVertical: 3,
     marginHorizontal: 16,
   },
-  userTitle: {
-    fontSize: 24,
+  userName: {
+    flex: 5,
+    fontSize: 20,
+    color: "white",
+  },
+  userPoints: {
+    flex: 1,
+    fontSize: 20,
     color: "white",
   },
 });
