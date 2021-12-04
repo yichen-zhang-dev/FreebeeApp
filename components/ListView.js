@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     backgroundColor: "#60a472",
-    padding: 16,
+    padding: 12,
     marginVertical: 4,
     marginHorizontal: 16,
     width: 300,
