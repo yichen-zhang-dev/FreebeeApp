@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     width: 300,
 
     padding: 16,
-    marginVertical: 3,
+    marginVertical: 4,
     marginHorizontal: 16,
   },
   userName: {

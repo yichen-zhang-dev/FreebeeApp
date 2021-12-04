@@ -120,10 +120,6 @@ export default function Login({ navigation }) {
           }}
         >
           <Button title="MapView" onPress={() => navigation.navigate("Home")} />
-          <Button
-            title="ListView"
-            onPress={() => navigation.navigate("ListView")}
-          />
         </View>
       </View>
     </View>

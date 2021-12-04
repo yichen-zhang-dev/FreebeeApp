@@ -3,6 +3,7 @@ import { Button } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import ListView from "./ListView";
 import CustomMapView from "./CustomMapView";
 import Ranking from "./Ranking";
 import AddSubmission from "./AddSubmission";
@@ -62,6 +63,9 @@ export default function DrawerNavigation({ db }) {
         }}
       >
         {(props) => <CustomMapView {...props} db={db} />}
+      </Drawer.Screen>
+      <Drawer.Screen name="ListView">
+        {(props) => <ListView {...props} db={db} />}
       </Drawer.Screen>
       <Drawer.Screen name="Leaderboard">
         {(props) => <Ranking {...props} db={db} />}

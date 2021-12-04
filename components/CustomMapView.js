@@ -67,11 +67,9 @@ export default class CustomMapView extends Component {
   }
 
   geoSuccess = (position) => {
-    console.log(position);
     this.setState({ ready: true });
     this.setState({ latitude: position.coords.latitude });
     this.setState({ longitude: position.coords.longitude });
-    console.log(this.state.latitude);
   };
 
   geoFail = (error) => {
@@ -94,8 +92,7 @@ export default class CustomMapView extends Component {
     this.populateData();
   }
   geoSuccess = (position) => {
-    console.log(position);
-    this.setState({ready:true});
+    this.setState({ ready: true });
     this.setState({ latitude: position.coords.latitude });
     this.setState({ longitude: position.coords.longitude });
   };
@@ -117,7 +114,6 @@ export default class CustomMapView extends Component {
   };
 
   render() {
-    console.log(this.state.markers);
     return (
       <View style={styles.container}>
         <Header ranking={false} navigation={this.props.navigation} />
