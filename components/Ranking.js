@@ -11,19 +11,35 @@ export default function Ranking({ db }) {
   const [users, setUsers] = useState({});
 
   useEffect(() => {
-    db.collection("userprofile").onSnapshot((querySnapshot) => {
-      let topUsers = [];
-      querySnapshot.forEach((doc) => {
-        let name = doc.data().first_name + " " + doc.data().last_name;
-        let points = doc.data().points;
-        topUsers.push({ name: name, points: points });
+    console.log("yes");
+    db.collection("userprofile")
+      .get()
+      .then((querySnapshot) => {
+        let topUsers = [];
+        querySnapshot.forEach((doc) => {
+          let name = doc.data().first_name + " " + doc.data().last_name;
+          let points = doc.data().points;
+          topUsers.push({ name: name, points: points });
+        });
+        topUsers.sort(function (a, b) {
+          return b.points - a.points;
+        });
+        setUsers(topUsers);
       });
-      topUsers.sort(function (a, b) {
-        return b.points - a.points;
-      });
-      setUsers(topUsers);
-    });
-  });
+
+    // db.collection("userprofile").onSnapshot((querySnapshot) => {
+    //   let topUsers = [];
+    //   querySnapshot.forEach((doc) => {
+    //     let name = doc.data().first_name + " " + doc.data().last_name;
+    //     let points = doc.data().points;
+    //     topUsers.push({ name: name, points: points });
+    //   });
+    //   topUsers.sort(function (a, b) {
+    //     return b.points - a.points;
+    //   });
+    //   setUsers(topUsers);
+    // });
+  }, []);
 
   const renderUser = (user) => {
     const colors = ["#0e7049", "#3c8a5d", "#60a472", "#7BBA83"];
@@ -48,7 +64,7 @@ export default function Ranking({ db }) {
       <View style={{ flex: 1, justifyContent: "flex-end", marginBottom: 10 }}>
         <Text style={{ fontSize: 45 }}>LEADERBOARD</Text>
       </View>
-      <View style={{ flex: 6 }}>
+      <View style={{ flex: 8 }}>
         <FlatList
           data={users}
           renderItem={renderUser}
