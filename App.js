@@ -149,16 +149,12 @@ export default function App() {
           hidden={"false"}
         />
         <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerShown: false }}
-          />
+        <Stack.Screen name="Login" options={{ headerShown: false }} >
+          {(props) => <Login {...props} db={db} />}
+        </Stack.Screen> 
+        <Stack.Screen name="SignUp" options={{ headerShown: false }}>
+          {(props) => <SignUp {...props} db={db} />}
+        </Stack.Screen>
           <Stack.Screen
             name="Home"
             options={{

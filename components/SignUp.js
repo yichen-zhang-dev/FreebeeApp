@@ -16,10 +16,16 @@ import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as Analytics from 'expo-firebase-analytics';
 import firebase from "firebase";
 
+<<<<<<< HEAD
 export default function Login({ navigation }) {
   Analytics.setCurrentScreen("Sign up");
+=======
+export default function Login({ navigation, db }) {
+>>>>>>> 083f72fdb7cf8c487606e0e4d6c053fcda5ab988
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
@@ -30,6 +36,13 @@ export default function Login({ navigation }) {
       .then((userCredential) => {
         const user = userCredential.user;
         navigation.navigate("MapView");
+        const uid = firebase.auth().currentUser.uid
+        db.collection("userprofile").doc(uid).set({
+          first_name: fname,
+          last_name: lname,
+          email: email,
+          points: 0
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -57,6 +70,22 @@ export default function Login({ navigation }) {
               <Text style={{ textDecorationLine: "underline" }}>LOG IN</Text>
             </Pressable>
           </Text>
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            placeholder="First Name"
+            placeholderTextColor="white"
+            onChangeText={(val) => setFName(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            placeholder="Last Name"
+            placeholderTextColor="white"
+            onChangeText={(val) => setLName(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
           <TextInput
             style={[styles.login, styles.loginForm]}
             placeholder="Email"

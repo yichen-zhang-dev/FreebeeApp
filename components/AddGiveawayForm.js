@@ -13,9 +13,13 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+<<<<<<< HEAD
 import * as Analytics from 'expo-firebase-analytics';
+=======
+import * as Location from "expo-location";
+>>>>>>> 083f72fdb7cf8c487606e0e4d6c053fcda5ab988
 
-export default function AddGiveawayForm({ navigation, db }) {
+export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
   // const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -24,11 +28,17 @@ export default function AddGiveawayForm({ navigation, db }) {
   const [giveawayLocation, setGiveawayLocation] = useState("");
   const [image, setImage] = useState(null);
 
+  const [ready, setReady] = useState(false);
+  const [currLatitude, setCurrLatitude] = useState(0);
+  const [currLongitude, setCurrLongitude] = useState(0);
+  const [currCoordinates, setCurrCoordinates] = useState([]);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
+
   const types = [
     "food",
     "phone accessories",
@@ -37,11 +47,35 @@ export default function AddGiveawayForm({ navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
-  const locations = ["CULC", "CRC"];
+  const locations = ["CULC", "CRC", "Your Location"];
   const target = ["All students", "CS majors"];
 
+<<<<<<< HEAD
   console.log("calling analytics")
   Analytics.setCurrentScreen("User Add Giveaway");
+=======
+  geoSuccess = (position) => {
+    setReady(true);
+    setCurrLatitude(position.coords.latitude);
+    setCurrLongitude(position.coords.longitude);
+  };
+
+  useEffect(() => {
+    if (currLatitude !== 0) return;
+    let geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    };
+    setReady(false);
+    Location.installWebGeolocationPolyfill();
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, geoOptions);
+  });
+
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
+>>>>>>> 083f72fdb7cf8c487606e0e4d6c053fcda5ab988
 
   useEffect(() => {
     (async () => {
@@ -78,15 +112,17 @@ export default function AddGiveawayForm({ navigation, db }) {
       return;
     }
 
-    // Geolocation.getCurrentPosition((info) => console.log(info));
     let longitude;
     let latitude;
-    if (giveawayLocation == "CULC") {
+    if (giveawayLocation === "CULC") {
       latitude = 33.77465054971255;
       longitude = -84.39637973754529;
-    } else {
+    } else if (giveawayLocation === "CRC") {
       latitude = 33.77560635846814;
       longitude = -84.40390882992358;
+    } else {
+      latitude = currLatitude;
+      longitude = currLongitude;
     }
 
     db.collection("giveaways").add({
