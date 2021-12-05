@@ -29,6 +29,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [currLatitude, setCurrLatitude] = useState(0);
   const [currLongitude, setCurrLongitude] = useState(0);
   const [currCoordinates, setCurrCoordinates] = useState([]);
+  const [organization, setOrganization] = useState("GT event");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -47,7 +48,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const locations = ["CULC", "CRC", "Your Location"];
   const target = ["All students", "CS majors"];
 
-  console.log("calling analytics");
   Analytics.setCurrentScreen("User Add Giveaway");
 
   const geoSuccess = (position) => {
@@ -125,6 +125,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
         date: date,
+        organization: organization,
       });
     } else {
       console.log("true");
@@ -133,6 +134,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         location: { longitude: longitude, latitude: latitude },
         spot: giveawayLocation,
         date: date,
+        organization: organization,
       });
     }
 
@@ -187,18 +189,34 @@ export default function AddGiveawayForm({ route, navigation, db }) {
           />
         </View>
         <View style={styles.dropdownContainer}>
-          <Text style={styles.dropdownTitle}>For:</Text>
-          <SelectDropdown
+          <Text style={styles.dropdownTitle}>
+            Organization: <Text style={{ color: "red" }}>*</Text>
+          </Text>
+
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              width: 200,
+              height: 40,
+              fontSize: 16,
+              textAlign: "center",
+            }}
+            placeholder="Enter an organization"
+            placeholderTextColor="black"
+            onChangeText={(val) => setOrganization(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          {/* <SelectDropdown
             data={target}
             onSelect={(selectedItem) => {
               console.log(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
-          />
+          /> */}
         </View>
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
+        <View style={{ flex: 1, alignItems: "center", paddingTop: 10 }}>
           <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
           <Button title="Upload Photo" onPress={PickImage} />
           {image && (
