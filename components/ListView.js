@@ -12,6 +12,7 @@ import {
 import Header from "./Header";
 import * as Location from "expo-location";
 import Swipeout from "react-native-swipeout";
+import * as Analytics from "expo-firebase-analytics";
 
 export default class ListView extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export default class ListView extends Component {
       giveaways: [],
       loading: true,
     };
+    Analytics.setCurrentScreen("ListView");
   }
 
   componentDidMount() {

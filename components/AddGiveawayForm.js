@@ -13,6 +13,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+import * as Analytics from "expo-firebase-analytics";
 import * as Location from "expo-location";
 
 export default function AddGiveawayForm({ route, navigation, db }) {
@@ -46,6 +47,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const locations = ["CULC", "CRC", "Your Location"];
   const target = ["All students", "CS majors"];
 
+  console.log("calling analytics");
+  Analytics.setCurrentScreen("User Add Giveaway");
   geoSuccess = (position) => {
     setReady(true);
     setCurrLatitude(position.coords.latitude);
