@@ -49,7 +49,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
 
   console.log("calling analytics");
   Analytics.setCurrentScreen("User Add Giveaway");
-  geoSuccess = (position) => {
+
+  const geoSuccess = (position) => {
     setReady(true);
     setCurrLatitude(position.coords.latitude);
     setCurrLongitude(position.coords.longitude);
@@ -67,7 +68,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, geoOptions);
   });
 
-  geoFail = (error) => {
+  const geoFail = (error) => {
     console.log(error.code, error.message);
   };
 
