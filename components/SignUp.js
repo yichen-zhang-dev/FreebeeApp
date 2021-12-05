@@ -14,11 +14,15 @@ import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import firebase from "firebase";
 
-export default function Login({ navigation }) {
+export default function Login({ navigation, db }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fname, setFName] = useState("");
+  const [lname, setLName] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
+  const [viewModeListView, setViewMode] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const viewModeSwitch = () => setViewMode((previousState) => !previousState);
 
   function handleSignup() {
     firebase
@@ -26,7 +30,20 @@ export default function Login({ navigation }) {
       .createUserWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        navigation.navigate("MapView");
+        navigation.navigate("Home");
+        const uid = firebase.auth().currentUser.uid
+        console.log(viewModeListView);
+        var mode = "Map View"
+        if (!viewModeListView) {
+          mode = "List View"
+        }
+        db.collection("userprofile").doc(uid).set({
+          first_name: fname,
+          last_name: lname,
+          email: email,
+          points: 0,
+          viewmode: mode
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -54,6 +71,22 @@ export default function Login({ navigation }) {
               <Text style={{ textDecorationLine: "underline" }}>LOG IN</Text>
             </Pressable>
           </Text>
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            placeholder="First Name"
+            placeholderTextColor="white"
+            onChangeText={(val) => setFName(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          <TextInput
+            style={[styles.login, styles.loginForm]}
+            placeholder="Last Name"
+            placeholderTextColor="white"
+            onChangeText={(val) => setLName(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
           <TextInput
             style={[styles.login, styles.loginForm]}
             placeholder="Email"
@@ -85,9 +118,10 @@ export default function Login({ navigation }) {
           style={{
             flex: 1,
             flexDirection: "row",
+            marginVertical: -90
           }}
         >
-          <Text style={{ color: "white", fontSize: 19 }}>
+          <Text style={{ color: "white", fontSize: 19  }}>
             {" "}
             Are you an event organizer?{" "}
           </Text>
@@ -104,6 +138,35 @@ export default function Login({ navigation }) {
             value={isEnabled}
           />
         </View>
+        <View
+          style={{
+          flex: 1,
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: 'center',
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 19 }}>
+              {" "}
+              Map View {" "}
+            </Text>
+            <Switch
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              trackColor={{ false: "#767577", true: "#151E3F" }}
+              thumbColor={ viewModeListView ? "#f5dd4b" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={viewModeSwitch}
+              value={viewModeListView}
+            />
+            <Text style={{ color: "white", fontSize: 19 }}>
+              {" "}
+              List View {" "}
+            </Text>
+        </View>
       </View>
       <View style={{ flex: 1 }}>
         <Pressable
@@ -111,7 +174,7 @@ export default function Login({ navigation }) {
           onPress={() => {
             handleSignup();
             if (!isEnabled) {
-              navigation.navigate("MapView");
+              navigation.navigate("Home");
             } else {
               navigation.navigate("PlannerInfo");
             }
@@ -129,7 +192,7 @@ export default function Login({ navigation }) {
         >
           <Button
             title="MapView"
-            onPress={() => navigation.navigate("MapView")}
+            onPress={() => navigation.navigate("Home")}
           />
           <Button
             title="ListView"

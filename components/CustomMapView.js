@@ -1,9 +1,13 @@
 import React, { useState, Component } from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, AnimatedRegion } from "react-native-maps";
 
 import Header from "./Header";
 import DrawerNavigation from "./DrawerNavigation";
+import * as Location from "expo-location";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircle, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "react-native-toast-notifications";
 
 // const Drawer = createDrawerNavigator();
 
@@ -11,6 +15,10 @@ export default class CustomMapView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ready: false,
+      latitude: 0,
+      longitude: 0,
+      coordinates: [],
       markers: [],
     };
   }
@@ -28,6 +36,17 @@ export default class CustomMapView extends Component {
   }
 
   async populateData() {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    };
+    Location.installWebGeolocationPolyfill();
+    navigator.geolocation.getCurrentPosition(
+      this.geoSuccess,
+      this.geoFail,
+      geoOptions
+    );
     this.props.db.collection("giveaways").onSnapshot((querySnapshot) => {
       let locationSet = new Set();
       let count = 0;
@@ -42,11 +61,6 @@ export default class CustomMapView extends Component {
             Math.random() * 0.0001 * (Math.random() < 0.5 ? -1 : 1);
         }
         locationSet.add(loc);
-        // updatedGiveaways.push({
-        //   id: doc.id,
-        //   type: doc.data().type,
-        //   location: loc,
-        // });
         this.setState({
           markers: [
             ...this.state.markers,
@@ -61,9 +75,33 @@ export default class CustomMapView extends Component {
     });
   }
 
+  geoSuccess = (position) => {
+    this.setState({ ready: true });
+    this.setState({ latitude: position.coords.latitude });
+    this.setState({ longitude: position.coords.longitude });
+  };
+
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
+
   componentDidMount() {
+    this.setState({ ready: false });
     this.populateData();
   }
+
+  // componentDidUpdate() {
+  //   this.populateData();
+  // }
+
+  geoSuccess = (position) => {
+    this.setState({ ready: true });
+    this.setState({ latitude: position.coords.latitude });
+    this.setState({ longitude: position.coords.longitude });
+  };
+  geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
 
   handleRemove = (id) => {
     this.props.db
@@ -76,6 +114,16 @@ export default class CustomMapView extends Component {
       .catch((error) => {
         console.error("Error removing document: ", error);
       });
+  };
+
+  goToMyLoc = () => {
+    let myLoc = {
+      latitude: this.state.latitude,
+      longitude: this.state.longitude,
+      latitudeDelta: 0.005,
+      longitudeDelta: 0.005,
+    };
+    if (this.state.latitude !== 0) this.mapView.animateToRegion(myLoc, 2000);
   };
 
   render() {
@@ -92,6 +140,8 @@ export default class CustomMapView extends Component {
           {/* <DrawerNavigation /> */}
           <MapView
             style={{ ...StyleSheet.absoluteFillObject }}
+            showsUserLocation={true}
+            ref={(ref) => (this.mapView = ref)}
             initialRegion={{
               latitude: 33.77465054971255,
               longitude: -84.39637973754529,
@@ -127,6 +177,17 @@ export default class CustomMapView extends Component {
               </Marker>
             ))}
           </MapView>
+          <View
+            style={{ paddingTop: 500, marginLeft: 325, position: "absolute" }}
+          >
+            <Pressable onPress={this.goToMyLoc} color="black">
+              <FontAwesomeIcon
+                icon={faLocationArrow}
+                size={30}
+                color="#1a73e8"
+              />
+            </Pressable>
+          </View>
         </View>
         <View
           style={{
@@ -136,7 +197,7 @@ export default class CustomMapView extends Component {
         >
           <Pressable
             style={styles.button}
-            onPress={() => this.props.navigation.navigate("AddGiveaway")}
+            onPress={() => this.props.navigation.navigate("AddGiveawayMapView")}
           >
             <Text style={styles.buttonText}>Add Giveaway</Text>
           </Pressable>
