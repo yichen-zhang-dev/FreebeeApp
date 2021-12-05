@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
+import * as Analytics from 'expo-firebase-analytics';
 
 export default function Ranking({ db }) {
   const [users, setUsers] = useState({});
@@ -29,6 +30,7 @@ export default function Ranking({ db }) {
   }, []);
 
   const renderUser = (user) => {
+    Analytics.setCurrentScreen("User Ranking");
     const colors = ["#0e7049", "#3c8a5d", "#60a472", "#7BBA83"];
     const color = user.index < 3 ? colors[user.index] : colors[3];
     return (

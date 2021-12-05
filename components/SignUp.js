@@ -12,9 +12,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
+
+import * as Analytics from 'expo-firebase-analytics';
 import firebase from "firebase";
 
+<<<<<<< HEAD
+export default function Login({ navigation }) {
+  Analytics.setCurrentScreen("Sign up");
+=======
 export default function Login({ navigation, db }) {
+>>>>>>> 083f72fdb7cf8c487606e0e4d6c053fcda5ab988
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fname, setFName] = useState("");

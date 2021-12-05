@@ -3,6 +3,7 @@ import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker, AnimatedRegion } from "react-native-maps";
 
 import Header from "./Header";
+// import DrawerNavigation from "./DrawerNavigation";
 import DrawerNavigation from "./DrawerNavigation";
 import * as Location from "expo-location";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";

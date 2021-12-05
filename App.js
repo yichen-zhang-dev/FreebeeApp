@@ -45,7 +45,7 @@ async function registerForPushNotificationsAsync() {
     }
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
-    this.setState({ expoPushToken: "New report!" });
+    return(token)
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -78,40 +78,69 @@ const db = app.firestore();
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
+function getActiveRouteName(navigationState) {
+    if (!navigationState) {
+      return null;
+    }
+    const route = navigationState.routes[navigationState.index];
+    console.log(navigationState.index)
+    // console.log(route)
+    if (route.routes) {
+      return getActiveRouteName(route);
+    }
+    return route.routeName;
+}
+
 export default function App() {
-  // const [expoPushToken, setExpoPushToken] = useState("");
-  // const [notification, setNotification] = useState(false);
-  // const notificationListener = useRef();
-  // const responseListener = useRef();
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [notification, setNotification] = useState(false);
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
 
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) =>
-  //     setExpoPushToken(token)
-  //   );
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) =>{
+      // alert("effect")
+      setExpoPushToken(token)
+    });
 
-  //   // This listener is fired whenever a notification is received while the app is foregrounded
-  //   notificationListener.current =
-  //     Notifications.addNotificationReceivedListener((notification) => {
-  //       setNotification(notification);
-  //     });
+    // This listener is fired whenever a notification is received while the app is foregrounded
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        // alert("notification")
+        setNotification(notification);
+      });
 
-  //   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-  //   responseListener.current =
-  //     Notifications.addNotificationResponseReceivedListener((response) => {
-  //       console.log(response);
-  //     });
+    // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(response);
+      });
 
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(
-  //       notificationListener.current
-  //     );
-  //     Notifications.removeNotificationSubscription(responseListener.current);
-  //   };
-  // }, []);
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   return (
     <ToastProvider>
-      <NavigationContainer>
+      <NavigationContainer
+        // ref={navigationRef}
+        // onStateChange={state => {
+        //   const previousRouteName = routeNameRef.current;
+        //   const currentRouteName = getActiveRouteName(state);
+        //   alert(previousRouteName + ": " + currentRouteName + ": " + JSON.stringify(state));
+          
+        //   if (previousRouteName !== currentRouteName) {
+        //     alert("Analytics called")
+        //     Analytics.setCurrentScreen(currentRouteName);
+        //   }
+        // }}
+      >
         <StatusBar
           animated={true}
           backgroundColor="#61dafb"
