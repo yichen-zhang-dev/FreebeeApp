@@ -125,11 +125,21 @@ export default function AddGiveawayForm({ route, navigation, db }) {
       longitude = currLongitude;
     }
 
-    db.collection("giveaways").add({
-      type: giveawayType,
-      location: { longitude: longitude, latitude: latitude },
-      date: date,
-    });
+    if (latitude == currLatitude) {
+      db.collection("giveaways").add({
+        type: giveawayType,
+        location: { longitude: longitude, latitude: latitude },
+        date: date,
+      });
+    } else {
+      console.log("true");
+      db.collection("giveaways").add({
+        type: giveawayType,
+        location: { longitude: longitude, latitude: latitude },
+        spot: giveawayLocation,
+        date: date,
+      });
+    }
 
     navigation.navigate("Submission");
   }

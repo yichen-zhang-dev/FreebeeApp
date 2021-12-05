@@ -149,12 +149,12 @@ export default function App() {
           hidden={"false"}
         />
         <Stack.Navigator>
-        <Stack.Screen name="Login" options={{ headerShown: false }} >
-          {(props) => <Login {...props} db={db} />}
-        </Stack.Screen> 
-        <Stack.Screen name="SignUp" options={{ headerShown: false }}>
-          {(props) => <SignUp {...props} db={db} />}
-        </Stack.Screen>
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {(props) => <Login {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen name="SignUp" options={{ headerShown: false }}>
+            {(props) => <SignUp {...props} db={db} />}
+          </Stack.Screen>
           <Stack.Screen
             name="Home"
             options={{
@@ -180,11 +180,9 @@ export default function App() {
             component={PlannerAddForm}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="ListView"
-            component={ListView}
-            options={{ headerShown: false }}
-          />
+          {/* <Stack.Screen name="ListView" options={{ headerShown: false }}>
+            {(props) => <ListView {...props} db={db} />}
+          </Stack.Screen> */}
           {/* <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
             {(props) => <AddGiveawayForm {...props} db={db} />}
           </Stack.Screen>
