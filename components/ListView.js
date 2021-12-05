@@ -91,6 +91,7 @@ export default class ListView extends Component {
           location: loc,
           distance: distance,
           org: doc.data().organization,
+          spot: doc.data().spot,
         });
       });
       // let sortedGiveaways = this.mergeSort(updatedGiveaways);
@@ -158,13 +159,28 @@ export default class ListView extends Component {
           },
         },
       ];
+
+      getOrgText = (org) => {
+        if (org === undefined) return "unknown";
+        return org;
+      };
+
+      getSpot = (spot) => {
+        if (spot === undefined) return "";
+        return spot;
+      };
       return (
         <Swipeout right={swipeoutBtns} style={styles.listItem}>
           <TouchableHighlight>
             <View>
-              <Text style={styles.itemTitle}>{item.type}</Text>
               <View style={{ flex: 1, flexDirection: "row" }}>
-                <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
+                <Text style={styles.itemTitle}>{item.type}</Text>
+                <Text style={styles.itemSpot}>{getSpot(item.spot)}</Text>
+              </View>
+              <View style={{ flex: 1, flexDirection: "row" }}>
+                <Text style={styles.itemOrg}>
+                  {getOrgText(item.org) + "\t\t"}
+                </Text>
                 <Text style={styles.itemDist}>
                   {"<" +
                     parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
@@ -242,8 +258,15 @@ const styles = StyleSheet.create({
     //
   },
   itemTitle: {
+    flex: 3,
     paddingTop: 10,
     fontSize: 20,
+    color: "black",
+  },
+  itemSpot: {
+    flex: 1,
+    paddingTop: 12,
+    fontSize: 16,
     color: "black",
   },
   itemOrg: {
