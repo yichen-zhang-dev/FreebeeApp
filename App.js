@@ -8,8 +8,6 @@ import Ranking from "./components/Ranking";
 import AddSubmission from "./components/AddSubmission";
 import CustomMapView from "./components/CustomMapView";
 import PlannerInfo from "./components/PlannerInfo";
-import PlannerMapView from "./components/PlannerMapView";
-import PlannerAddForm from "./components/PlannerAddForm";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -79,36 +77,7 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default function App() {
-  // const [expoPushToken, setExpoPushToken] = useState("");
-  // const [notification, setNotification] = useState(false);
-  // const notificationListener = useRef();
-  // const responseListener = useRef();
-
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then((token) =>
-  //     setExpoPushToken(token)
-  //   );
-
-  //   // This listener is fired whenever a notification is received while the app is foregrounded
-  //   notificationListener.current =
-  //     Notifications.addNotificationReceivedListener((notification) => {
-  //       setNotification(notification);
-  //     });
-
-  //   // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-  //   responseListener.current =
-  //     Notifications.addNotificationResponseReceivedListener((response) => {
-  //       console.log(response);
-  //     });
-
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(
-  //       notificationListener.current
-  //     );
-  //     Notifications.removeNotificationSubscription(responseListener.current);
-  //   };
-  // }, []);
-
+  global.eventPlanner = false;
   return (
     <ToastProvider>
       <NavigationContainer>
@@ -117,7 +86,7 @@ export default function App() {
           backgroundColor="#61dafb"
           barStyle={"dark-content"}
           showHideTransition={"fade"}
-          hidden={"false"}
+          hidden={false}
         />
         <Stack.Navigator>
           <Stack.Screen name="Login" options={{ headerShown: false }}>
@@ -139,16 +108,6 @@ export default function App() {
           <Stack.Screen
             name="PlannerInfo"
             component={PlannerInfo}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PlannerMapView"
-            component={PlannerMapView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PlannerAddForm"
-            component={PlannerAddForm}
             options={{ headerShown: false }}
           />
           {/* <Stack.Screen name="ListView" options={{ headerShown: false }}>

@@ -90,10 +90,6 @@ export default class CustomMapView extends Component {
     this.populateData();
   }
 
-  // componentDidUpdate() {
-  //   this.populateData();
-  // }
-
   geoSuccess = (position) => {
     this.setState({ ready: true });
     this.setState({ latitude: position.coords.latitude });

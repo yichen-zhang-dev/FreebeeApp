@@ -32,12 +32,6 @@ export default function PlannerInfo({ navigation }) {
         </Text>
         <TextInput
           style={[styles.login, styles.loginForm]}
-          placeholder="Name"
-          placeholderTextColor="white"
-          onChangeText={(val) => setname(val)}
-        />
-        <TextInput
-          style={[styles.login, styles.loginForm]}
           placeholder="Club/Org"
           placeholderTextColor="white"
           onChangeText={(val) => setClub(val)}
@@ -46,7 +40,7 @@ export default function PlannerInfo({ navigation }) {
       <View style={{ flex: 1 }}>
         <Pressable
           style={styles.loginButton}
-          onPress={() => navigation.navigate("PlannerMapView")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Sign Up</Text>
         </Pressable>

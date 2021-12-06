@@ -9,13 +9,12 @@ import {
   Modal,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-// import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 
 import firebase from "firebase";
 
-export default function Login({ navigation }) {
+export default function Login({ navigation , db }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +26,18 @@ export default function Login({ navigation }) {
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         const user = userCredential.user;
+        const userID = user.uid;
         navigation.navigate("Home");
+        console.log(userID);
+        var docRef = db.collection("userprofile").doc(userID);
+        docRef.get().then( (doc) => {
+          if (doc.exists) {
+            global.eventPlanner = true;
+          }
+          else {
+            console.log("No such document!");
+          }
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -41,7 +51,7 @@ export default function Login({ navigation }) {
         });
       });
   }
-
+  
   return (
     <View style={styles.container}>
       <Modal

@@ -19,10 +19,15 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
   // const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("date");
+  const [counter, setCounter] = useState(0);
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(null);
 
   const [giveawayType, setGiveawayType] = useState("");
   const [giveawayLocation, setGiveawayLocation] = useState("");
   const [image, setImage] = useState(null);
+  const [clubInfo, setClubInfo] = useState("");
 
   const [ready, setReady] = useState(false);
   const [currLatitude, setCurrLatitude] = useState(0);
@@ -32,7 +37,31 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
-    setDate(currentDate);
+    tempDate = new Date(currentDate);
+    if (mode === "date") {
+      setDate(new Date(currentDate));
+      showMode("time");
+    }
+    if (mode === "time" && counter === 0) {
+      setCounter(1);
+      setStartTime(new Date(selectedDate));
+      showMode("time");
+    } else if (mode === "time" && counter === 1) {
+      setEndTime(new Date(selectedDate));
+    }
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+  const showDatepicker = () => {
+    showMode('date');
+    setCounter(0);
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
   };
 
   const types = [
@@ -120,7 +149,9 @@ export default function AddGiveawayForm({ route, navigation, db }) {
       db.collection("giveaways").add({
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
-        date: date,
+        clubInfo: clubInfo,
+        startTime: startTime,
+        endTime: endTime,
       });
     } else {
       console.log("true");
@@ -128,14 +159,17 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
         spot: giveawayLocation,
-        date: date,
+        clubInfo: clubInfo,
+        startTime: startTime,
+        endTime: endTime,
       });
     }
 
     navigation.navigate("Submission");
   }
-
+  
   return (
+    
     <View style={styles.container}>
       <Header />
       <View style={{ flex: 5 }}>
@@ -150,6 +184,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             data={types}
             onSelect={(selectedItem) => {
               setGiveawayType(selectedItem);
+              console.log(startTime);
+              console.log(endTime);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
@@ -166,22 +202,41 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
         </View>
-        <View style={styles.dropdownContainer}>
-          <Text style={styles.dropdownTitle}>
-            Date: <Text style={{ color: "red" }}>*</Text>
-          </Text>
-          <DateTimePicker
-            value={date}
-            mode={"date"}
-            display="default"
-            onChange={onChange}
-            style={{
-              width: 150,
-              alignSelf: "center",
-              marginLeft: 30,
-            }}
-          />
-        </View>
+        {global.eventPlanner && (
+          <View style={styles.dropdownContainer}>
+            <Text style={styles.dropdownTitle}>
+              Date: <Text style={{ color: "red" }}>*</Text>
+            </Text>
+            <Button onPress={showDatepicker} title="Pick a Date!" />
+            {show && (
+            <DateTimePicker
+              value={date}
+              mode={mode}
+              display="default"
+              onChange={onChange}
+              style={{
+                width: 150,
+                alignSelf: "center",
+                marginLeft: 30,
+              }}
+            /> )}
+            {/* <Button onPress={showTimepicker} title="Pick a Time!" />
+            {show && (
+            <DateTimePicker
+              value={date}
+              mode={mode}
+              display="default"
+              onChange={onChange}
+              style={{
+                width: 150,
+                alignSelf: "center",
+                marginLeft: 30,
+              }}
+            /> )} */}
+  
+
+          </View>
+        )}
         <View style={styles.dropdownContainer}>
           <Text style={styles.dropdownTitle}>For:</Text>
           <SelectDropdown
@@ -192,7 +247,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
         </View>
-        <View
+        {!global.eventPlanner && (<View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
@@ -204,6 +259,19 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             />
           )}
         </View>
+        )}
+        {global.eventPlanner && (
+          <View style={styles.container}>
+          <Text style={styles.dropdownTitle}>
+              Info about giveaway: <Text style={{ color: "red" }}>*</Text>
+            </Text>
+          <TextInput style={styles.textForm}
+              multiline={true}
+              numberOfLines={4}
+              onChangeText={(text) => setClubInfo(text)}
+              />
+          </View>
+        )}
       </View>
       <View style={{ flex: 1 }}>
         <Pressable style={styles.buttonContainer} onPress={handleSubmission}>
@@ -240,4 +308,15 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 66,
   },
+  textForm: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    marginBottom: 8,
+    width: 300,
+    height: 100,
+  }
 });

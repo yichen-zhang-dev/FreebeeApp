@@ -9,7 +9,6 @@ import {
   Switch,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-// import { faMap } from '@fortawesome/free-solid-svg-icons';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import firebase from "firebase";
@@ -42,7 +41,8 @@ export default function Login({ navigation, db }) {
           last_name: lname,
           email: email,
           points: 0,
-          viewmode: mode
+          viewmode: mode,
+          eventPlanner: isEnabled,
         });
       })
       .catch((error) => {
@@ -178,6 +178,7 @@ export default function Login({ navigation, db }) {
             } else {
               navigation.navigate("PlannerInfo");
             }
+            global.planner = isEnabled;
           }}
         >
           <Text style={{ color: "#7BBA83", fontSize: 24 }}>Register</Text>
@@ -211,6 +212,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#7BBA83",
+    marginTop: -50,
   },
   appTitle: {
     color: "black",
