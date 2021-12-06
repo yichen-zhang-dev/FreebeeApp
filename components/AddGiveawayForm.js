@@ -13,6 +13,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+import * as Analytics from "expo-firebase-analytics";
 import * as Location from "expo-location";
 
 export default function AddGiveawayForm({ route, navigation, db }) {
@@ -33,6 +34,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [currLatitude, setCurrLatitude] = useState(0);
   const [currLongitude, setCurrLongitude] = useState(0);
   const [currCoordinates, setCurrCoordinates] = useState([]);
+  const [organization, setOrganization] = useState("GT event");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -75,7 +77,9 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const locations = ["CULC", "CRC", "Your Location"];
   const target = ["All students", "CS majors"];
 
-  geoSuccess = (position) => {
+  Analytics.setCurrentScreen("User Add Giveaway");
+
+  const geoSuccess = (position) => {
     setReady(true);
     setCurrLatitude(position.coords.latitude);
     setCurrLongitude(position.coords.longitude);
@@ -93,7 +97,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, geoOptions);
   });
 
-  geoFail = (error) => {
+  const geoFail = (error) => {
     console.log(error.code, error.message);
   };
 
@@ -152,6 +156,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         clubInfo: clubInfo,
         startTime: startTime,
         endTime: endTime,
+        date: date,
+        organization: organization,
       });
     } else {
       console.log("true");
@@ -162,6 +168,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         clubInfo: clubInfo,
         startTime: startTime,
         endTime: endTime,
+        date: date,
+        organization: organization,
       });
     }
 
@@ -238,14 +246,32 @@ export default function AddGiveawayForm({ route, navigation, db }) {
           </View>
         )}
         <View style={styles.dropdownContainer}>
-          <Text style={styles.dropdownTitle}>For:</Text>
-          <SelectDropdown
+          <Text style={styles.dropdownTitle}>
+            Organization: <Text style={{ color: "red" }}>*</Text>
+          </Text>
+
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              width: 200,
+              height: 40,
+              fontSize: 16,
+              textAlign: "center",
+            }}
+            placeholder="Enter an organization"
+            placeholderTextColor="black"
+            onChangeText={(val) => setOrganization(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          {/* <SelectDropdown
             data={target}
             onSelect={(selectedItem) => {
               console.log(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
-          />
+          /> */}
         </View>
         {!global.eventPlanner && (<View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}

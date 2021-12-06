@@ -7,9 +7,12 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Pressable,
+  TouchableHighlight,
 } from "react-native";
 import Header from "./Header";
 import * as Location from "expo-location";
+import Swipeout from "react-native-swipeout";
+import * as Analytics from "expo-firebase-analytics";
 
 export default class ListView extends Component {
   constructor(props) {
@@ -22,6 +25,7 @@ export default class ListView extends Component {
       giveaways: [],
       loading: true,
     };
+    Analytics.setCurrentScreen("ListView");
   }
 
   componentDidMount() {
@@ -31,6 +35,7 @@ export default class ListView extends Component {
       timeout: 10000,
     };
     this.setState({ ready: false });
+
     Location.installWebGeolocationPolyfill();
     navigator.geolocation.getCurrentPosition(
       this.geoSuccess,
@@ -38,12 +43,14 @@ export default class ListView extends Component {
       geoOptions
     );
   }
+
   geoSuccess = (position) => {
     this.setState({ ready: true });
     this.setState({ latitude: position.coords.latitude });
     this.setState({ longitude: position.coords.longitude });
     this.populateData();
   };
+
   geoFail = (error) => {
     console.log(error.code, error.message);
   };
@@ -67,100 +74,9 @@ export default class ListView extends Component {
     return deg * (Math.PI / 180);
   };
 
-  merge = (arr1, arr2) => {
-    //make a new array and have two value pointers
-    let res = [],
-      i = 0,
-      j = 0;
-    //sorting the first array.
-    if (arr1.length > 1) {
-      let min = 0;
-      for (let i = 0; i < arr1.length; i++) {
-        if (i !== min) {
-          if (arr1[i].distance < arr1[min].distance) {
-            //also swap the elements
-            [arr1[i], arr1[min]] = [arr1[min], arr1[i]];
-            //change the minimum
-            min = i;
-          }
-        }
-      }
-    }
-    //sorting the second array.
-    if (arr2.length > 1) {
-      let min = 0;
-      for (let i = 0; i < arr2.length; i++) {
-        if (i !== min) {
-          if (arr2[i].distance < arr2[min].distance) {
-            //also swap the elements
-            [arr2[i], arr2[min]] = [arr2[min], arr2[i]];
-            //change the minimum
-            min = i;
-          }
-        }
-      }
-    }
-    //Value comparison.
-    while (i < arr1.length && j < arr2.length) {
-      if (arr1[i].distance < arr2[j].distance) {
-        res.push(arr1[i]);
-        i++;
-      } else {
-        res.push(arr2[j]);
-        j++;
-      }
-    }
-    //pushing the rest of arr1.
-    while (i < arr1.length) {
-      res.push(arr1[i]);
-      i++;
-    }
-    //pushing the rest of arr2.
-    while (j < arr2.length) {
-      res.push(arr2[j]);
-      j++;
-    }
-    return res;
-  };
-
-  //merge sort
-  mergeSort = (arr) => {
-    //Best case
-    if (arr.length <= 1) return arr;
-    //splitting into halves
-    let mid = Math.ceil(arr.length / 2);
-    let arr1 = arr.slice(0, mid);
-    let arr2 = arr.slice(mid);
-    let arr1_subarrays = [],
-      sorted_arr1_subarrays = [];
-    let arr2_subarrays = [],
-      sorted_arr2_subarrays = [];
-    //loop through array 1 making subarrays of two elements
-    for (let i = 0; i < arr1.length; i += 2) {
-      arr1_subarrays.push(arr1.slice(i, i + 2));
-    }
-    //loop through array 2 making subarrays of two elements.
-    for (let i = 0; i < arr2.length; i += 2) {
-      arr2_subarrays.push(arr2.slice(i, i + 2));
-    }
-    // sorting each subarray of arr1.
-    for (let i = 0; i < arr1_subarrays.length; i += 2) {
-      let result = this.merge(arr1_subarrays[i], arr1_subarrays[i + 1]);
-      result.forEach((value) => sorted_arr1_subarrays.push(value));
-    }
-    // sorting each subarray of arr2.
-    for (let i = 0; i < arr2_subarrays.length; i += 2) {
-      let result = this.merge(arr2_subarrays[i], arr2_subarrays[i + 1]);
-      result.forEach((value) => sorted_arr2_subarrays.push(value));
-    }
-    let result = this.merge(sorted_arr1_subarrays, sorted_arr2_subarrays);
-    return result;
-  };
-
   populateData = () => {
-    let updatedGiveaways = [];
     this.props.db.collection("giveaways").onSnapshot((querySnapshot) => {
-      let locationSet = new Set();
+      let updatedGiveaways = [];
       querySnapshot.forEach((doc) => {
         let loc = doc.data().location;
         let distance = this.calculateDistance(
@@ -169,13 +85,13 @@ export default class ListView extends Component {
           loc.latitude,
           loc.longitude
         );
-        locationSet.add(loc);
         updatedGiveaways.push({
           id: doc.id,
           type: doc.data().type,
           location: loc,
           distance: distance,
           org: doc.data().organization,
+          spot: doc.data().spot,
         });
       });
       // let sortedGiveaways = this.mergeSort(updatedGiveaways);
@@ -191,20 +107,100 @@ export default class ListView extends Component {
     });
   };
 
+  // renderData(item) {
+  //   let swipeoutBtns = [
+  //     {
+  //       text: "Remove",
+  //       backgroundColor: "red",
+  //       underlayColor: "rgba(0, 0, 0, 1, 0.6)",
+  //       onPress: () => {
+  //         console.log(item);
+  //       },
+  //     },
+  //   ];
+
+  //   return (
+  //     <Swipeout right={swipeoutBtns} style={styles.listItem}>
+  //       <TouchableHighlight>
+  //         <View>
+  //           <Text style={styles.itemTitle}>{item.type}</Text>
+  //           <View style={{ flex: 1, flexDirection: "row" }}>
+  //             <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
+  //             <Text style={styles.itemDist}>
+  //               {"<" +
+  //                 parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
+  //                 "miles"}
+  //             </Text>
+  //           </View>
+  //         </View>
+  //       </TouchableHighlight>
+  //     </Swipeout>
+  //   );
+  // }
+
   render() {
     renderItem = ({ item }) => {
+      let swipeoutBtns = [
+        {
+          text: "Remove",
+          backgroundColor: "red",
+          underlayColor: "rgba(0, 0, 0, 1, 0.6)",
+          onPress: () => {
+            this.props.db
+              .collection("giveaways")
+              .doc(item.id)
+              .delete()
+              .then(() => {
+                console.log("Document successfully deleted!");
+              })
+              .catch((error) => {
+                console.error("Error removing document: ", error);
+              });
+          },
+        },
+      ];
+
+      getOrgText = (org) => {
+        if (org === undefined) return "unknown";
+        return org;
+      };
+
+      getSpot = (spot) => {
+        if (spot === undefined) return "";
+        return spot;
+      };
       return (
-        <TouchableOpacity style={styles.listItem}>
-          <Text style={styles.itemTitle}>{item.type}</Text>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
-            <Text style={styles.itemDist}>
-              {"<" +
-                parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
-                "miles"}
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <Swipeout right={swipeoutBtns} style={styles.listItem}>
+          <TouchableHighlight>
+            <View>
+              <View style={{ flex: 1, flexDirection: "row" }}>
+                <Text style={styles.itemTitle}>{item.type}</Text>
+                <Text style={styles.itemSpot}>{getSpot(item.spot)}</Text>
+              </View>
+              <View style={{ flex: 1, flexDirection: "row" }}>
+                <Text style={styles.itemOrg}>
+                  {getOrgText(item.org) + "\t\t"}
+                </Text>
+                <Text style={styles.itemDist}>
+                  {"<" +
+                    parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
+                    "miles"}
+                </Text>
+              </View>
+            </View>
+          </TouchableHighlight>
+        </Swipeout>
+        // <TouchableOpacity style={styles.listItem}>
+        //   <Text style={styles.itemTitle}>{item.type}</Text>
+        //   <View style={{ flex: 1, flexDirection: "row" }}>
+        //     <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
+        //     <Text style={styles.itemDist}>
+        //       {"<" +
+        //         parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
+        //         "miles"}
+        //     </Text>
+        //   </View>
+        // </TouchableOpacity>
       );
     };
     if (this.state.loading) {
@@ -234,9 +230,6 @@ export default class ListView extends Component {
             >
               <Text style={styles.buttonText}>Add Giveaway</Text>
             </Pressable>
-            <Pressable style={styles.button}>
-              <Text style={styles.buttonText}>Remove Giveaway</Text>
-            </Pressable>
           </View>
         </View>
       );
@@ -256,14 +249,24 @@ const styles = StyleSheet.create({
   },
   listItem: {
     backgroundColor: "#60a472",
-    padding: 12,
+    // padding: 12,
+    paddingHorizontal: 12,
+    // paddingVertical: 12,
     marginVertical: 4,
     marginHorizontal: 16,
     width: 300,
     //
   },
   itemTitle: {
+    flex: 3,
+    paddingTop: 10,
     fontSize: 20,
+    color: "black",
+  },
+  itemSpot: {
+    flex: 1,
+    paddingTop: 12,
+    fontSize: 16,
     color: "black",
   },
   itemOrg: {
@@ -275,6 +278,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     color: "white",
+    paddingBottom: 10,
   },
   button: {
     flex: 1,

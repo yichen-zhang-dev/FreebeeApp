@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 
+import * as Analytics from "expo-firebase-analytics";
 import firebase from "firebase";
 
 export default function Login({ navigation, db }) {
@@ -30,11 +31,11 @@ export default function Login({ navigation, db }) {
       .then((userCredential) => {
         const user = userCredential.user;
         navigation.navigate("Home");
-        const uid = firebase.auth().currentUser.uid
+        const uid = firebase.auth().currentUser.uid;
         console.log(viewModeListView);
-        var mode = "Map View"
+        var mode = "Map View";
         if (!viewModeListView) {
-          mode = "List View"
+          mode = "List View";
         }
         db.collection("userprofile").doc(uid).set({
           first_name: fname,
@@ -118,10 +119,10 @@ export default function Login({ navigation, db }) {
           style={{
             flex: 1,
             flexDirection: "row",
-            marginVertical: -90
+            marginVertical: -90,
           }}
         >
-          <Text style={{ color: "white", fontSize: 19  }}>
+          <Text style={{ color: "white", fontSize: 19 }}>
             {" "}
             Are you an event organizer?{" "}
           </Text>
@@ -140,32 +141,26 @@ export default function Login({ navigation, db }) {
         </View>
         <View
           style={{
-          flex: 1,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: 'center',
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <Text style={{ color: "white", fontSize: 19 }}>
-              {" "}
-              Map View {" "}
-            </Text>
-            <Switch
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              trackColor={{ false: "#767577", true: "#151E3F" }}
-              thumbColor={ viewModeListView ? "#f5dd4b" : "#f4f3f4"}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={viewModeSwitch}
-              value={viewModeListView}
-            />
-            <Text style={{ color: "white", fontSize: 19 }}>
-              {" "}
-              List View {" "}
-            </Text>
+          <Text style={{ color: "white", fontSize: 19 }}> Map View </Text>
+          <Switch
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            trackColor={{ false: "#767577", true: "#151E3F" }}
+            thumbColor={viewModeListView ? "#f5dd4b" : "#f4f3f4"}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={viewModeSwitch}
+            value={viewModeListView}
+          />
+          <Text style={{ color: "white", fontSize: 19 }}> List View </Text>
         </View>
       </View>
       <View style={{ flex: 1 }}>
@@ -191,10 +186,7 @@ export default function Login({ navigation, db }) {
             alignItems: "center",
           }}
         >
-          <Button
-            title="MapView"
-            onPress={() => navigation.navigate("Home")}
-          />
+          <Button title="MapView" onPress={() => navigation.navigate("Home")} />
           <Button
             title="ListView"
             onPress={() => navigation.navigate("ListView")}
