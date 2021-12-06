@@ -103,8 +103,21 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     if (!result.cancelled) {
       uri = result.uri
       setImage(result.uri);
+      this.uploadImage(result.uri, "test-image")
+        .then(() => {
+
+        }).catch((error) => {
+
+        });
     }
   };
+
+  uploadImage = async (uri, imageName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    var ref = firebase.storage().ref().child("images/" + imageName);
+    ref.put(blob);
+  }
  
   async function handleSubmission() {
     if (date < new Date()) {
