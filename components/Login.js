@@ -32,7 +32,7 @@ export default function Login({ navigation }) {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        uid = firebase.auth().currentUser.uid;
+        login_uid = firebase.auth().currentUser.uid;
         console.log("login uid " + uid)
         navigation.navigate("Home");
       })
