@@ -13,8 +13,16 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+import * as Analytics from "expo-firebase-analytics";
+import * as Location from "expo-location";
 
-export default function AddGiveawayForm({ navigation, db }) {
+import firebase from "firebase";
+
+
+import {login_uid} from "./Login.js";
+import {signup_uid} from "./SignUp.js";
+
+export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
   // const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
@@ -23,11 +31,20 @@ export default function AddGiveawayForm({ navigation, db }) {
   const [giveawayLocation, setGiveawayLocation] = useState("");
   const [image, setImage] = useState(null);
 
+  const [ready, setReady] = useState(false);
+  const [currLatitude, setCurrLatitude] = useState(0);
+  const [currLongitude, setCurrLongitude] = useState(0);
+  const [currCoordinates, setCurrCoordinates] = useState([]);
+  const [organization, setOrganization] = useState("GT event");
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
+
+  var uri;
+
   const types = [
     "food",
     "phone accessories",
@@ -36,8 +53,32 @@ export default function AddGiveawayForm({ navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
-  const locations = ["CULC", "CRC"];
+  const locations = ["CULC", "CRC", "Your Location"];
   const target = ["All students", "CS majors"];
+
+  Analytics.setCurrentScreen("User Add Giveaway");
+
+  const geoSuccess = (position) => {
+    setReady(true);
+    setCurrLatitude(position.coords.latitude);
+    setCurrLongitude(position.coords.longitude);
+  };
+
+  useEffect(() => {
+    if (currLatitude !== 0) return;
+    let geoOptions = {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000,
+    };
+    setReady(false);
+    Location.installWebGeolocationPolyfill();
+    navigator.geolocation.getCurrentPosition(geoSuccess, geoFail, geoOptions);
+  });
+
+  const geoFail = (error) => {
+    console.log(error.code, error.message);
+  };
 
   useEffect(() => {
     (async () => {
@@ -60,11 +101,12 @@ export default function AddGiveawayForm({ navigation, db }) {
     });
 
     if (!result.cancelled) {
+      uri = result.uri
       setImage(result.uri);
     }
   };
-
-  function handleSubmission() {
+ 
+  async function handleSubmission() {
     if (date < new Date()) {
       console.log("Invalid date!");
     }
@@ -74,24 +116,57 @@ export default function AddGiveawayForm({ navigation, db }) {
       return;
     }
 
-    // Geolocation.getCurrentPosition((info) => console.log(info));
     let longitude;
     let latitude;
-    if (giveawayLocation == "CULC") {
+    if (giveawayLocation === "CULC") {
       latitude = 33.77465054971255;
       longitude = -84.39637973754529;
-    } else {
+    } else if (giveawayLocation === "CRC") {
       latitude = 33.77560635846814;
       longitude = -84.40390882992358;
+    } else {
+      latitude = currLatitude;
+      longitude = currLongitude;
     }
 
-    db.collection("giveaways").add({
-      type: giveawayType,
-      location: { longitude: longitude, latitude: latitude },
-      date: date,
-    });
-
-    navigation.navigate("AddSubmission");
+    if (latitude == currLatitude) {
+      db.collection("giveaways").add({
+        type: giveawayType,
+        location: { longitude: longitude, latitude: latitude },
+        date: date,
+        organization: organization,
+      });
+    } else {
+      console.log("true");
+      db.collection("giveaways").add({
+        type: giveawayType,
+        location: { longitude: longitude, latitude: latitude },
+        spot: giveawayLocation,
+        date: date,
+        organization: organization,
+      });
+    }
+    
+    var userprofiledoc;
+    var curr_points;
+    var new_points;
+    if (login_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(login_uid).get(); 
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(login_uid).update({
+        points: new_points
+      })
+    }
+    if (signup_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(signup_uid).get(); 
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(signup_uid).update({
+        points: new_points
+      })
+    }
+    navigation.navigate("Submission");
   }
 
   return (
@@ -142,18 +217,34 @@ export default function AddGiveawayForm({ navigation, db }) {
           />
         </View>
         <View style={styles.dropdownContainer}>
-          <Text style={styles.dropdownTitle}>For:</Text>
-          <SelectDropdown
+          <Text style={styles.dropdownTitle}>
+            Organization: <Text style={{ color: "red" }}>*</Text>
+          </Text>
+
+          <TextInput
+            style={{
+              borderWidth: 1,
+              borderRadius: 8,
+              width: 200,
+              height: 40,
+              fontSize: 16,
+              textAlign: "center",
+            }}
+            placeholder="Enter an organization"
+            placeholderTextColor="black"
+            onChangeText={(val) => setOrganization(val)}
+            autoCorrect={false}
+            autoCapitalize={"none"}
+          />
+          {/* <SelectDropdown
             data={target}
             onSelect={(selectedItem) => {
               console.log(selectedItem);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
-          />
+          /> */}
         </View>
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
+        <View style={{ flex: 1, alignItems: "center", paddingTop: 10 }}>
           <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
           <Button title="Upload Photo" onPress={PickImage} />
           {image && (

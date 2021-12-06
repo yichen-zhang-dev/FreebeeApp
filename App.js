@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Settings, StyleSheet, Text, View } from "react-native";
+import { Settings, StyleSheet, Text, View, StatusBar } from "react-native";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import ListView from "./components/ListView";
@@ -13,10 +13,14 @@ import PlannerAddForm from "./components/PlannerAddForm";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import { ToastProvider } from "react-native-toast-notifications";
+
 import firebase from "firebase";
 
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DrawerNavigation from "./components/DrawerNavigation";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -41,7 +45,7 @@ async function registerForPushNotificationsAsync() {
     }
     const token = (await Notifications.getExpoPushTokenAsync()).data;
     console.log(token);
-    this.setState({ expoPushToken: "New report!" });
+    return(token)
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -72,21 +76,39 @@ const app = !firebase.apps.length
 const db = app.firestore();
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+
+function getActiveRouteName(navigationState) {
+    if (!navigationState) {
+      return null;
+    }
+    const route = navigationState.routes[navigationState.index];
+    console.log(navigationState.index)
+    // console.log(route)
+    if (route.routes) {
+      return getActiveRouteName(route);
+    }
+    return route.routeName;
+}
 
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const navigationRef = useRef();
+  const routeNameRef = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>
+    registerForPushNotificationsAsync().then((token) =>{
+      // alert("effect")
       setExpoPushToken(token)
-    );
+    });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
+        // alert("notification")
         setNotification(notification);
       });
 
@@ -105,64 +127,152 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
+    <ToastProvider>
+      <NavigationContainer
+        // ref={navigationRef}
+        // onStateChange={state => {
+        //   const previousRouteName = routeNameRef.current;
+        //   const currentRouteName = getActiveRouteName(state);
+        //   alert(previousRouteName + ": " + currentRouteName + ": " + JSON.stringify(state));
+          
+        //   if (previousRouteName !== currentRouteName) {
+        //     alert("Analytics called")
+        //     Analytics.setCurrentScreen(currentRouteName);
+        //   }
+        // }}
+      >
+        <StatusBar
+          animated={true}
+          backgroundColor="#61dafb"
+          barStyle={"dark-content"}
+          showHideTransition={"fade"}
+          hidden={"false"}
         />
-        <Stack.Screen
-          name="SignUp"
-          component={SignUp}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="MapView" options={{ headerShown: false }}>
-          {(props) => <CustomMapView {...props} db={db} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="PlannerInfo"
-          component={PlannerInfo}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PlannerMapView"
-          component={PlannerMapView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PlannerAddForm"
-          component={PlannerAddForm}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ListView"
-          component={ListView}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="AddForm" options={{ headerShown: false }}>
-          {(props) => <AddGiveawayForm {...props} db={db} />}
-        </Stack.Screen>
-        <Stack.Screen
-          name="Ranking"
-          component={Ranking}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="AddSubmission"
-          component={AddSubmission}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" options={{ headerShown: false }}>
+            {(props) => <Login {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen name="SignUp" options={{ headerShown: false }}>
+            {(props) => <SignUp {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Home"
+            options={{
+              headerShown: false,
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          >
+            {(props) => <DrawerNavigation {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="PlannerInfo"
+            component={PlannerInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerMapView"
+            component={PlannerMapView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerAddForm"
+            component={PlannerAddForm}
+            options={{ headerShown: false }}
+          />
+          {/* <Stack.Screen name="ListView" options={{ headerShown: false }}>
+            {(props) => <ListView {...props} db={db} />}
+          </Stack.Screen> */}
+          {/* <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
+            {(props) => <AddGiveawayForm {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Ranking"
+            component={Ranking}
+            options={{ title: "Leaderboard" }}
+          />
+          <Stack.Screen
+            name="AddSubmission"
+            component={AddSubmission}
+            options={{
+              title: "Submission Rewards",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          /> */}
+        </Stack.Navigator>
+
+        {/* <DrawerNavigation /> */}
+
+        {/* <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SignUp"
+            component={SignUp}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MapView"
+            options={{
+              title: "Home",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          >
+            {(props) => <CustomMapView {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="PlannerInfo"
+            component={PlannerInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerMapView"
+            component={PlannerMapView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PlannerAddForm"
+            component={PlannerAddForm}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ListView"
+            component={ListView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
+            {(props) => <AddGiveawayForm {...props} db={db} />}
+          </Stack.Screen>
+          <Stack.Screen
+            name="Ranking"
+            component={Ranking}
+            options={{ title: "Leaderboard" }}
+          />
+          <Stack.Screen
+            name="AddSubmission"
+            component={AddSubmission}
+            options={{
+              title: "Submission Rewards",
+              headerBackVisible: false,
+              gestureEnabled: false,
+            }}
+          />
+        </Stack.Navigator> */}
+      </NavigationContainer>
+    </ToastProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#7BBA83",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#7BBA83",
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+// });

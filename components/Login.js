@@ -10,27 +10,42 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
+import * as Analytics from 'expo-firebase-analytics';
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
+import { useToast } from "react-native-toast-notifications";
 
 import firebase from "firebase";
+
+var login_uid;
+
+export { login_uid };
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-
+  const toast = useToast();
+  
+  Analytics.setCurrentScreen("Login");
   function handleLogin() {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
-        navigation.navigate("MapView");
+        uid = firebase.auth().currentUser.uid;
+        console.log("login uid " + uid)
+        navigation.navigate("Home");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
+        toast.show("User not found", {
+          type: "danger",
+          placement: "bottom",
+          duration: 500,
+          offset: 0,
+          animationType: "slide-in",
+        });
       });
   }
 
@@ -91,14 +106,7 @@ export default function Login({ navigation }) {
             alignItems: "center",
           }}
         >
-          <Button
-            title="MapView"
-            onPress={() => navigation.navigate("MapView")}
-          />
-          <Button
-            title="ListView"
-            onPress={() => navigation.navigate("ListView")}
-          />
+          <Button title="MapView" onPress={() => navigation.navigate("Home")} />
         </View>
       </View>
     </View>
@@ -123,7 +131,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   loginForm: {
-    width: 200,
+    width: 230,
     borderBottomWidth: 1,
     borderColor: "white",
     fontSize: 20,

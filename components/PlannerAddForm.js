@@ -13,12 +13,14 @@ import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
+import * as Analytics from 'expo-firebase-analytics';
 
 export default function PlannerAddGiveaway({ navigation }) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
+  Analytics.setCurrentScreen("Organization Add Giveaway");
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");

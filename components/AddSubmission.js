@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import Header from "./Header";
 
+import * as Analytics from 'expo-firebase-analytics';
+
+
 export default function AddSubmission({ navigation }) {
+  Analytics.setCurrentScreen("User Add Submission");
   return (
     <View style={styles.container}>
       <Header />
