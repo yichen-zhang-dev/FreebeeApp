@@ -16,6 +16,12 @@ import * as ImagePicker from "expo-image-picker";
 import * as Analytics from "expo-firebase-analytics";
 import * as Location from "expo-location";
 
+import firebase from "firebase";
+
+
+import {login_uid} from "./Login.js";
+import {signup_uid} from "./SignUp.js";
+
 export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
   // const [mode, setMode] = useState("date");
@@ -36,6 +42,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     setShow(Platform.OS === "ios");
     setDate(currentDate);
   };
+
+  var uri;
 
   const types = [
     "food",
@@ -93,11 +101,12 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     });
 
     if (!result.cancelled) {
+      uri = result.uri
       setImage(result.uri);
     }
   };
-
-  function handleSubmission() {
+ 
+  async function handleSubmission() {
     if (date < new Date()) {
       console.log("Invalid date!");
     }
@@ -137,7 +146,26 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         organization: organization,
       });
     }
-
+    
+    var userprofiledoc;
+    var curr_points;
+    var new_points;
+    if (login_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(login_uid).get(); 
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(login_uid).update({
+        points: new_points
+      })
+    }
+    if (signup_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(signup_uid).get(); 
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(signup_uid).update({
+        points: new_points
+      })
+    }
     navigation.navigate("Submission");
   }
 

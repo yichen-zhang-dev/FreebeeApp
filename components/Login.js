@@ -16,6 +16,10 @@ import { useToast } from "react-native-toast-notifications";
 
 import firebase from "firebase";
 
+var login_uid;
+
+export { login_uid };
+
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +32,8 @@ export default function Login({ navigation }) {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        const user = userCredential.user;
+        uid = firebase.auth().currentUser.uid;
+        console.log("login uid " + uid)
         navigation.navigate("Home");
       })
       .catch((error) => {
