@@ -1,16 +1,11 @@
-import React, { useState, Component } from "react";
-import { Button, StyleSheet, Text, View, Pressable } from "react-native";
-import MapView, { Callout, Marker, AnimatedRegion } from "react-native-maps";
+import React, { Component } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import MapView, { Callout, Marker } from "react-native-maps";
 import * as Analytics from "expo-firebase-analytics";
 import Header from "./Header";
-// import DrawerNavigation from "./DrawerNavigation";
-import DrawerNavigation from "./DrawerNavigation";
 import * as Location from "expo-location";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircle, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "react-native-toast-notifications";
-
-// const Drawer = createDrawerNavigator();
+import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
 export default class CustomMapView extends Component {
   constructor(props) {

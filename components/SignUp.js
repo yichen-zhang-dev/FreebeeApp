@@ -10,8 +10,6 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
-
-import * as Analytics from "expo-firebase-analytics";
 import firebase from "firebase";
 
 var signup_uid;

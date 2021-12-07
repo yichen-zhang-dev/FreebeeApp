@@ -1,10 +1,9 @@
-import React, { useState, Component } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   ActivityIndicator,
   Pressable,
   TouchableHighlight,
@@ -94,8 +93,6 @@ export default class ListView extends Component {
           spot: doc.data().spot,
         });
       });
-      // let sortedGiveaways = this.mergeSort(updatedGiveaways);
-      // console.log(sortedGiveaways);
       updatedGiveaways.sort(function (a, b) {
         return a.distance - b.distance;
       });
@@ -106,37 +103,6 @@ export default class ListView extends Component {
       this.setState({ loading: false });
     });
   };
-
-  // renderData(item) {
-  //   let swipeoutBtns = [
-  //     {
-  //       text: "Remove",
-  //       backgroundColor: "red",
-  //       underlayColor: "rgba(0, 0, 0, 1, 0.6)",
-  //       onPress: () => {
-  //         console.log(item);
-  //       },
-  //     },
-  //   ];
-
-  //   return (
-  //     <Swipeout right={swipeoutBtns} style={styles.listItem}>
-  //       <TouchableHighlight>
-  //         <View>
-  //           <Text style={styles.itemTitle}>{item.type}</Text>
-  //           <View style={{ flex: 1, flexDirection: "row" }}>
-  //             <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
-  //             <Text style={styles.itemDist}>
-  //               {"<" +
-  //                 parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
-  //                 "miles"}
-  //             </Text>
-  //           </View>
-  //         </View>
-  //       </TouchableHighlight>
-  //     </Swipeout>
-  //   );
-  // }
 
   render() {
     renderItem = ({ item }) => {
@@ -190,17 +156,6 @@ export default class ListView extends Component {
             </View>
           </TouchableHighlight>
         </Swipeout>
-        // <TouchableOpacity style={styles.listItem}>
-        //   <Text style={styles.itemTitle}>{item.type}</Text>
-        //   <View style={{ flex: 1, flexDirection: "row" }}>
-        //     <Text style={styles.itemOrg}>{item.org + "\t\t"}</Text>
-        //     <Text style={styles.itemDist}>
-        //       {"<" +
-        //         parseFloat((item.distance * 0.621371 + 0.01).toFixed(2)) +
-        //         "miles"}
-        //     </Text>
-        //   </View>
-        // </TouchableOpacity>
       );
     };
     if (this.state.loading) {

@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Settings, StyleSheet, Text, View, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import ListView from "./components/ListView";
-import AddGiveawayForm from "./components/AddGiveawayForm";
-import Ranking from "./components/Ranking";
-import AddSubmission from "./components/AddSubmission";
-import CustomMapView from "./components/CustomMapView";
 import PlannerInfo from "./components/PlannerInfo";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -42,7 +37,6 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    // console.log(token);
     return token;
   } else {
     alert("Must use physical device for Push Notifications");
@@ -127,19 +121,7 @@ export default function App() {
 
   return (
     <ToastProvider>
-      <NavigationContainer
-      // ref={navigationRef}
-      // onStateChange={state => {
-      //   const previousRouteName = routeNameRef.current;
-      //   const currentRouteName = getActiveRouteName(state);
-      //   alert(previousRouteName + ": " + currentRouteName + ": " + JSON.stringify(state));
-
-      //   if (previousRouteName !== currentRouteName) {
-      //     alert("Analytics called")
-      //     Analytics.setCurrentScreen(currentRouteName);
-      //   }
-      // }}
-      >
+      <NavigationContainer>
         <StatusBar
           animated={true}
           backgroundColor="#61dafb"
@@ -169,99 +151,8 @@ export default function App() {
             component={PlannerInfo}
             options={{ headerShown: false }}
           />
-          {/* <Stack.Screen name="ListView" options={{ headerShown: false }}>
-            {(props) => <ListView {...props} db={db} />}
-          </Stack.Screen> */}
-          {/* <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
-            {(props) => <AddGiveawayForm {...props} db={db} />}
-          </Stack.Screen>
-          <Stack.Screen
-            name="Ranking"
-            component={Ranking}
-            options={{ title: "Leaderboard" }}
-          />
-          <Stack.Screen
-            name="AddSubmission"
-            component={AddSubmission}
-            options={{
-              title: "Submission Rewards",
-              headerBackVisible: false,
-              gestureEnabled: false,
-            }}
-          /> */}
         </Stack.Navigator>
-
-        {/* <DrawerNavigation /> */}
-
-        {/* <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MapView"
-            options={{
-              title: "Home",
-              headerBackVisible: false,
-              gestureEnabled: false,
-            }}
-          >
-            {(props) => <CustomMapView {...props} db={db} />}
-          </Stack.Screen>
-          <Stack.Screen
-            name="PlannerInfo"
-            component={PlannerInfo}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PlannerMapView"
-            component={PlannerMapView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PlannerAddForm"
-            component={PlannerAddForm}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ListView"
-            component={ListView}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="AddForm" options={{ title: "Submit a giveaway" }}>
-            {(props) => <AddGiveawayForm {...props} db={db} />}
-          </Stack.Screen>
-          <Stack.Screen
-            name="Ranking"
-            component={Ranking}
-            options={{ title: "Leaderboard" }}
-          />
-          <Stack.Screen
-            name="AddSubmission"
-            component={AddSubmission}
-            options={{
-              title: "Submission Rewards",
-              headerBackVisible: false,
-              gestureEnabled: false,
-            }}
-          />
-        </Stack.Navigator> */}
       </NavigationContainer>
     </ToastProvider>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#7BBA83",
-//     alignItems: "center",
-//     justifyContent: "center",
-//   },
-// });
