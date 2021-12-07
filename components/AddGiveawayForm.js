@@ -81,14 +81,26 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
-  const locations = ["Your Location", "Bill Moore", 
-    "Bio Quad", "Burger Bowl", "College of Computing", 
-    "CRC", "Crossland", "CULC", "GT Connector", "Klaus", 
-    "North Ave Dining", "Price Gilbert Library", 
-    "Skiles Walkway," "Student Center", "Tech Tower", "West Village"];
+  const locations = [
+    "Your Location",
+    "Bill Moore",
+    "Bio Quad",
+    "Burger Bowl",
+    "College of Computing",
+    "CRC",
+    "Crossland",
+    "CULC",
+    "GT Connector",
+    "Klaus",
+    "North Ave Dining",
+    "Price Gilbert Library",
+    "Skiles Walkway",
+    "Student Center",
+    "Tech Tower",
+    "West Village",
+  ];
   const target = ["All students", "CS majors"];
 
-  
   const geoSuccess = (position) => {
     setReady(true);
     setCurrLatitude(position.coords.latitude);
@@ -151,7 +163,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   };
 
   async function handleSubmission() {
-
     if (date < new Date()) {
       console.log("Invalid date!");
     }
