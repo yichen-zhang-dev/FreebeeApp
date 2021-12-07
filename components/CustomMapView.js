@@ -6,6 +6,7 @@ import Header from "./Header";
 import * as Location from "expo-location";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import firebase from "firebase";
 
 export default class CustomMapView extends Component {
   constructor(props) {
@@ -74,6 +75,7 @@ export default class CustomMapView extends Component {
         });
       });
     });
+    this.getImage("hi")
   }
 
   geoSuccess = (position) => {
@@ -86,6 +88,14 @@ export default class CustomMapView extends Component {
     console.log(error.code, error.message);
   };
 
+  async getImage(giveawayId) {
+    var id = "e98506c8-37a2-453d-8cad-5a9cdeeefb96"
+    const ref = firebase.storage().ref("images/" + id);
+    const storage_url = await ref.getDownloadURL();
+    //storage_url holds the url to the image - display this variable in image comp in html
+    console.log(storage_url)
+  }
+  
   componentDidMount() {
     this.setState({ ready: false });
     this.populateData();

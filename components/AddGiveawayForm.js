@@ -38,10 +38,9 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [currLongitude, setCurrLongitude] = useState(0);
   const [currCoordinates, setCurrCoordinates] = useState([]);
   const [organization, setOrganization] = useState("GT event");
-  //const [curr_uuid, setUuid] = useState("");
+  var [uri, setUri] = useState("testing");
 
   var curr_uuid;
-  var uri;
 
   Analytics.setCurrentScreen("User Add Giveaway");
 
@@ -147,8 +146,9 @@ export default function AddGiveawayForm({ route, navigation, db }) {
 
     if (!result.cancelled) {
       uri = result.uri;
+      setUri(uri)
+      console.log("result cancelled uri " + uri)
       setImage(result.uri);
-      console.log("---" + curr_uuid);
     }
   };
 
@@ -186,7 +186,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     }
 
     if (latitude == currLatitude) {
-      console.log("Uuid" + uuid.v4())
       curr_uuid = uuid.v4()
       console.log("current uuid " + curr_uuid)
       db.collection("giveaways").doc(curr_uuid).set({
@@ -232,7 +231,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
       });
     }
     
-    console.log("uri" + uri);
+    console.log("uri " + uri);
     if (uri != undefined) {
       console.log("///" + curr_uuid)
       uploadImage(uri, curr_uuid)
