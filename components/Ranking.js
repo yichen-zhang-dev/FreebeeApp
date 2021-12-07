@@ -44,7 +44,9 @@ export default function Ranking({ db }) {
         <Text style={styles.userName}>
           {user.index + 1 + ". " + user.item.name}
         </Text>
-        <Text style={styles.userPoints}>{user.item.points + "pt"}</Text>
+        <View style={{ alignItems: "flex-end", flex: 1 }}>
+          <Text style={styles.userPoints}>{user.item.points + "pt"}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   userName: {
-    flex: 5,
+    flex: 4,
     fontSize: 20,
     color: "white",
   },
