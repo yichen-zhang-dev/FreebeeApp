@@ -7,31 +7,50 @@ import { signup_uid } from "./SignUp.js";
 
 export default function UserProfile({ navigation, db }) {
   const [points, setPoints] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
-    getPoints();
+    getPointsAndName();
   });
 
-  async function getPoints() { 
+  async function getPointsAndName() {
     if (login_uid != undefined) {
-      const userprofiledoc = await db.collection("userprofile").doc(login_uid).get();
+      const userprofiledoc = await db
+        .collection("userprofile")
+        .doc(login_uid)
+        .get();
       const curr_points = userprofiledoc.data().points;
       setPoints(curr_points);
+      setFirstName(userprofiledoc.data().first_name);
     }
     if (signup_uid != undefined) {
-      const userprofiledoc = await db.collection("userprofile").doc(signup_uid).get();
+      const userprofiledoc = await db
+        .collection("userprofile")
+        .doc(signup_uid)
+        .get();
       const curr_points = userprofiledoc.data().points;
       setPoints(curr_points);
+      setFirstName(userprofiledoc.data().first_name);
     }
   }
 
   return (
     <View style={styles.container}>
       <Header />
-      <View style={{ flex: 3 }}>
-        <Text>Hello User Profile!</Text>
-        <Text>{"Points: " + points}</Text>
-        <Button title="Sign out" onPress={() => navigation.navigate("Login")} />
+      <View style={{ flex: 3, alignItems: "center" }}>
+        <Text style={{ fontSize: 24, paddingBottom: 10 }}>
+          Hi {firstName + "!"}
+        </Text>
+        <Text style={{ fontSize: 16, paddingBottom: 10 }}>
+          {"Your current points: " + points + "pt"}
+        </Text>
+        <View style={{ flex: 1, justifyContent: "flex-start", paddingTop: 20 }}>
+          <Button
+            title="Sign out"
+            onPress={() => navigation.navigate("Login")}
+          />
+        </View>
       </View>
     </View>
   );

@@ -18,7 +18,6 @@ export default function AddSubmission({ navigation, db }) {
         .doc(login_uid)
         .get()
         .then((doc) => {
-          console.log("here");
           curr_points = doc.data().points;
           setPoints(curr_points);
         });

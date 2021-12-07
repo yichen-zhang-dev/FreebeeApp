@@ -7,7 +7,6 @@ import {
   Button,
   Pressable,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -43,6 +42,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
 
   var curr_uuid;
   var uri;
+
+  Analytics.setCurrentScreen("User Add Giveaway");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -82,10 +83,25 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
-  const locations = ["CULC", "CRC", "Your Location"];
+  const locations = [
+    "Your Location",
+    "Bill Moore",
+    "Bio Quad",
+    "Burger Bowl",
+    "College of Computing",
+    "CRC",
+    "Crossland",
+    "CULC",
+    "GT Connector",
+    "Klaus",
+    "North Ave Dining",
+    "Price Gilbert Library",
+    "Skiles Walkway",
+    "Student Center",
+    "Tech Tower",
+    "West Village",
+  ];
   const target = ["All students", "CS majors"];
-
-  Analytics.setCurrentScreen("User Add Giveaway");
 
   const geoSuccess = (position) => {
     setReady(true);
@@ -184,10 +200,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
       });
  
     } else {
-      console.log("Uuid: " + uuid.v4())
-      curr_uuid = uuid.v4()
-      console.log("curr_uuid" + curr_uuid);
-      db.collection("giveaways").doc(curr_uuid).set({ 
+      db.collection("giveaways").add({
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
         spot: giveawayLocation,
@@ -280,19 +293,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
                 }}
               />
             )}
-            {/* <Button onPress={showTimepicker} title="Pick a Time!" />
-            {show && (
-            <DateTimePicker
-              value={date}
-              mode={mode}
-              display="default"
-              onChange={onChange}
-              style={{
-                width: 150,
-                alignSelf: "center",
-                marginLeft: 30,
-              }}
-            /> )} */}
           </View>
         )}
         <View style={styles.dropdownContainer}>
@@ -315,13 +315,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             autoCorrect={false}
             autoCapitalize={"none"}
           />
-          {/* <SelectDropdown
-            data={target}
-            onSelect={(selectedItem) => {
-              console.log(selectedItem);
-            }}
-            buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
-          /> */}
         </View>
         {!global.eventPlanner && (
           <View style={{ flex: 1, alignItems: "center", paddingTop: 13 }}>

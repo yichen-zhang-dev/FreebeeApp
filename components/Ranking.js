@@ -25,7 +25,6 @@ export default function Ranking({ db }) {
       topUsers.sort(function (a, b) {
         return b.points - a.points;
       });
-      console.log(topUsers);
       setUsers(topUsers);
     });
   }, []);

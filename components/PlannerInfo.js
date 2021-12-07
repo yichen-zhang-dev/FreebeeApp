@@ -1,15 +1,7 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Pressable,
-  TextInput,
-  Button,
-} from "react-native";
+import { StyleSheet, Text, View, Pressable, TextInput } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-// import { faMap } from '@fortawesome/free-solid-svg-icons';
-import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faMap } from "@fortawesome/free-solid-svg-icons";
 
 export default function PlannerInfo({ navigation }) {
   const [name, setname] = useState("");
@@ -25,10 +17,10 @@ export default function PlannerInfo({ navigation }) {
       </View>
       <View style={{ flex: 2, justifyContent: "center" }}>
         <Text style={[styles.login, { fontSize: 30, marginBottom: 0 }]}>
-            Event Organizer
+          Event Organizer
         </Text>
         <Text style={[styles.login, { fontSize: 30, marginBottom: 15 }]}>
-            Sign Up
+          Sign Up
         </Text>
         <TextInput
           style={[styles.login, styles.loginForm]}
@@ -59,7 +51,6 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: "black",
-    // fontFamily: "monospace",
     fontSize: 45,
   },
   login: {

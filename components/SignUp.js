@@ -10,8 +10,6 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
-
-import * as Analytics from "expo-firebase-analytics";
 import firebase from "firebase";
 
 var signup_uid;
@@ -36,7 +34,7 @@ export default function Login({ navigation, db }) {
         const user = userCredential.user;
         navigation.navigate("Home");
         signup_uid = firebase.auth().currentUser.uid;
-        console.log(viewModeListView);
+        // console.log(viewModeListView);
         var mode = "Map View";
         if (!viewModeListView) {
           mode = "List View";

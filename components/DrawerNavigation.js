@@ -9,8 +9,6 @@ import Ranking from "./Ranking";
 import AddSubmission from "./AddSubmission";
 import AddGiveawayForm from "./AddGiveawayForm";
 import UserProfile from "./UserProfile";
-import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet, Text, View, Pressable } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();

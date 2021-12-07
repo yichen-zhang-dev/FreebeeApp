@@ -1,16 +1,11 @@
-import React, { useState, Component } from "react";
-import { Button, StyleSheet, Text, View, Pressable } from "react-native";
-import MapView, { Callout, Marker, AnimatedRegion } from "react-native-maps";
-
+import React, { Component } from "react";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import MapView, { Callout, Marker } from "react-native-maps";
+import * as Analytics from "expo-firebase-analytics";
 import Header from "./Header";
-// import DrawerNavigation from "./DrawerNavigation";
-import DrawerNavigation from "./DrawerNavigation";
 import * as Location from "expo-location";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircle, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
-import { useToast } from "react-native-toast-notifications";
-
-// const Drawer = createDrawerNavigator();
+import { faLocationArrow } from "@fortawesome/free-solid-svg-icons";
 
 export default class CustomMapView extends Component {
   constructor(props) {
@@ -22,6 +17,7 @@ export default class CustomMapView extends Component {
       coordinates: [],
       markers: [],
     };
+    Analytics.setCurrentScreen("Custom Map View");
   }
 
   needsLocationChange(locationSet, loc) {
@@ -69,6 +65,10 @@ export default class CustomMapView extends Component {
               id: doc.id,
               type: doc.data().type,
               location: loc,
+              org: doc.data().organization,
+              date: doc.data().date,
+              startTime: doc.data().startTime,
+              endTime: doc.data().endTime,
             },
           ],
         });
@@ -124,6 +124,41 @@ export default class CustomMapView extends Component {
   };
 
   render() {
+    const dateText = (marker) => {
+      if (typeof marker.startTime !== "undefined") {
+        if (typeof marker.endTime !== "undefined" && marker.endTime !== null) {
+          return (
+            <View>
+              {"date: " +
+                new Date(marker.startTime.seconds * 1000).toDateString()}
+              {"\nstart time: " +
+                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()}
+              {"\nend time: " +
+                new Date(marker.endTime.seconds * 1000).toLocaleTimeString()}
+            </View>
+          );
+        } else {
+          return (
+            <Text>
+              {"date: " +
+                new Date(marker.startTime.seconds * 1000).toDateString()}
+              {"\nstart time: " +
+                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()}
+            </Text>
+          );
+          // }
+        }
+      } else {
+        return (
+          <Text>
+            {"date: " + new Date(marker.date.seconds * 1000).toDateString()}
+            {"\ntime: " +
+              new Date(marker.date.seconds * 1000).toLocaleTimeString()}
+          </Text>
+        );
+      }
+    };
+
     return (
       <View style={styles.container}>
         <Header ranking={false} navigation={this.props.navigation} />
@@ -158,9 +193,10 @@ export default class CustomMapView extends Component {
               >
                 <Callout>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ alignSelf: "center" }}>GT event</Text>
-                    <Text>ID: {marker.id}</Text>
-                    <Text>Type: {marker.type}</Text>
+                    <Text style={{ alignSelf: "center" }}>{marker.org}</Text>
+                    <Text>{marker.type}</Text>
+
+                    {dateText(marker)}
                     <Pressable
                       style={styles.removeButton}
                       onPress={() => this.handleRemove(marker.id)}
