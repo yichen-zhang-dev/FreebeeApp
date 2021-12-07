@@ -18,6 +18,7 @@ import * as Location from "expo-location";
 import firebase from "firebase";
 import { login_uid } from "./Login.js";
 import { signup_uid } from "./SignUp.js";
+import uuid from 'react-native-uuid';
 
 export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
@@ -38,6 +39,10 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [currLongitude, setCurrLongitude] = useState(0);
   const [currCoordinates, setCurrCoordinates] = useState([]);
   const [organization, setOrganization] = useState("GT event");
+  //const [curr_uuid, setUuid] = useState("");
+
+  var curr_uuid;
+  var uri;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -68,8 +73,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const showTimepicker = () => {
     showMode("time");
   };
-
-  var uri;
 
   const types = [
     "food",
@@ -129,9 +132,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     if (!result.cancelled) {
       uri = result.uri;
       setImage(result.uri);
-      this.uploadImage(result.uri, "test-image")
-        .then(() => {})
-        .catch((error) => {});
+      console.log("---" + curr_uuid);
     }
   };
 
@@ -169,7 +170,10 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     }
 
     if (latitude == currLatitude) {
-      db.collection("giveaways").add({
+      console.log("Uuid" + uuid.v4())
+      curr_uuid = uuid.v4()
+      console.log("current uuid " + curr_uuid)
+      db.collection("giveaways").doc(curr_uuid).set({
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
         clubInfo: clubInfo,
@@ -178,9 +182,12 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         date: date,
         organization: organization,
       });
+ 
     } else {
-      console.log("true");
-      db.collection("giveaways").add({
+      console.log("Uuid: " + uuid.v4())
+      curr_uuid = uuid.v4()
+      console.log("curr_uuid" + curr_uuid);
+      db.collection("giveaways").doc(curr_uuid).set({ 
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
         spot: giveawayLocation,
@@ -211,7 +218,15 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         points: new_points,
       });
     }
-
+    
+    console.log("uri" + uri);
+    if (uri != undefined) {
+      console.log("///" + curr_uuid)
+      uploadImage(uri, curr_uuid)
+        .then(() => {})
+        .catch((error) => {});
+    }
+    
     navigation.navigate("Submission");
   }
 
@@ -230,8 +245,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             data={types}
             onSelect={(selectedItem) => {
               setGiveawayType(selectedItem);
-              console.log(startTime);
-              console.log(endTime);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />
