@@ -196,7 +196,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
         organization: organization,
       });
     } else {
-      console.log("true");
       db.collection("giveaways").add({
         type: giveawayType,
         location: { longitude: longitude, latitude: latitude },
@@ -247,8 +246,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             data={types}
             onSelect={(selectedItem) => {
               setGiveawayType(selectedItem);
-              console.log(startTime);
-              console.log(endTime);
             }}
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           />

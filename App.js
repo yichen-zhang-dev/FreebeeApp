@@ -42,8 +42,8 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     const token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
-    return(token)
+    // console.log(token);
+    return token;
   } else {
     alert("Must use physical device for Push Notifications");
   }
@@ -77,16 +77,16 @@ const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 function getActiveRouteName(navigationState) {
-    if (!navigationState) {
-      return null;
-    }
-    const route = navigationState.routes[navigationState.index];
-    console.log(navigationState.index)
-    // console.log(route)
-    if (route.routes) {
-      return getActiveRouteName(route);
-    }
-    return route.routeName;
+  if (!navigationState) {
+    return null;
+  }
+  const route = navigationState.routes[navigationState.index];
+  // console.log(navigationState.index);
+  // console.log(route)
+  if (route.routes) {
+    return getActiveRouteName(route);
+  }
+  return route.routeName;
 }
 
 export default function App() {
@@ -99,9 +99,9 @@ export default function App() {
   const routeNameRef = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then((token) =>{
+    registerForPushNotificationsAsync().then((token) => {
       // alert("effect")
-      setExpoPushToken(token)
+      setExpoPushToken(token);
     });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
@@ -128,17 +128,17 @@ export default function App() {
   return (
     <ToastProvider>
       <NavigationContainer
-        // ref={navigationRef}
-        // onStateChange={state => {
-        //   const previousRouteName = routeNameRef.current;
-        //   const currentRouteName = getActiveRouteName(state);
-        //   alert(previousRouteName + ": " + currentRouteName + ": " + JSON.stringify(state));
-          
-        //   if (previousRouteName !== currentRouteName) {
-        //     alert("Analytics called")
-        //     Analytics.setCurrentScreen(currentRouteName);
-        //   }
-        // }}
+      // ref={navigationRef}
+      // onStateChange={state => {
+      //   const previousRouteName = routeNameRef.current;
+      //   const currentRouteName = getActiveRouteName(state);
+      //   alert(previousRouteName + ": " + currentRouteName + ": " + JSON.stringify(state));
+
+      //   if (previousRouteName !== currentRouteName) {
+      //     alert("Analytics called")
+      //     Analytics.setCurrentScreen(currentRouteName);
+      //   }
+      // }}
       >
         <StatusBar
           animated={true}

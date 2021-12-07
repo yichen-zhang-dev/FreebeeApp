@@ -36,7 +36,7 @@ export default function Login({ navigation, db }) {
         const user = userCredential.user;
         navigation.navigate("Home");
         signup_uid = firebase.auth().currentUser.uid;
-        console.log(viewModeListView);
+        // console.log(viewModeListView);
         var mode = "Map View";
         if (!viewModeListView) {
           mode = "List View";
