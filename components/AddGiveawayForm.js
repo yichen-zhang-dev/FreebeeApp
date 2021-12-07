@@ -39,6 +39,8 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   const [currCoordinates, setCurrCoordinates] = useState([]);
   const [organization, setOrganization] = useState("GT event");
 
+  Analytics.setCurrentScreen("User Add Giveaway");
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
@@ -79,11 +81,14 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     "hand-sanitizer",
     "other",
   ];
-  const locations = ["CULC", "CRC", "Your Location"];
+  const locations = ["Your Location", "Bill Moore", 
+    "Bio Quad", "Burger Bowl", "College of Computing", 
+    "CRC", "Crossland", "CULC", "GT Connector", "Klaus", 
+    "North Ave Dining", "Price Gilbert Library", 
+    "Skiles Walkway," "Student Center", "Tech Tower", "West Village"];
   const target = ["All students", "CS majors"];
 
-  Analytics.setCurrentScreen("User Add Giveaway");
-
+  
   const geoSuccess = (position) => {
     setReady(true);
     setCurrLatitude(position.coords.latitude);
@@ -146,6 +151,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   };
 
   async function handleSubmission() {
+
     if (date < new Date()) {
       console.log("Invalid date!");
     }

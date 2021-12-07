@@ -1,7 +1,7 @@
 import React, { useState, Component } from "react";
 import { Button, StyleSheet, Text, View, Pressable } from "react-native";
 import MapView, { Callout, Marker, AnimatedRegion } from "react-native-maps";
-
+import * as Analytics from "expo-firebase-analytics";
 import Header from "./Header";
 // import DrawerNavigation from "./DrawerNavigation";
 import DrawerNavigation from "./DrawerNavigation";
@@ -22,6 +22,7 @@ export default class CustomMapView extends Component {
       coordinates: [],
       markers: [],
     };
+    Analytics.setCurrentScreen("Custom Map View");
   }
 
   needsLocationChange(locationSet, loc) {
