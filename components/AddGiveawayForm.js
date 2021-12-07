@@ -197,16 +197,16 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     var new_points;
     if (login_uid != undefined) {
       userprofiledoc = await db.collection("userprofile").doc(login_uid).get();
-      var curr_points = userprofiledoc.data().points;
-      var new_points = curr_points + 5;
+      curr_points = userprofiledoc.data().points;
+      new_points = curr_points + 5;
       db.collection("userprofile").doc(login_uid).update({
         points: new_points,
       });
     }
     if (signup_uid != undefined) {
       userprofiledoc = await db.collection("userprofile").doc(signup_uid).get();
-      var curr_points = userprofiledoc.data().points;
-      var new_points = curr_points + 5;
+      curr_points = userprofiledoc.data().points;
+      new_points = curr_points + 5;
       db.collection("userprofile").doc(signup_uid).update({
         points: new_points,
       });

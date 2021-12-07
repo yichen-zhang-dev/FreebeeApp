@@ -92,7 +92,9 @@ export default function DrawerNavigation({ db }) {
       <Drawer.Screen name="Leaderboard">
         {(props) => <Ranking {...props} db={db} />}
       </Drawer.Screen>
-      <Drawer.Screen name="User Profile" component={UserProfile} />
+      <Drawer.Screen name="User Profile">
+        {(props) => <UserProfile {...props} db={db} />}
+      </Drawer.Screen>
       <Drawer.Screen
         name="AddGiveawayMapView"
         options={{
