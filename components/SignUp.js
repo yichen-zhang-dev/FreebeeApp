@@ -12,6 +12,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import firebase from "firebase";
 
+import * as Analytics from "expo-firebase-analytics";
+
 var signup_uid;
 
 export { signup_uid };
@@ -27,6 +29,7 @@ export default function Login({ navigation, db }) {
   const viewModeSwitch = () => setViewMode((previousState) => !previousState);
 
   function handleSignup() {
+
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -53,6 +56,8 @@ export default function Login({ navigation, db }) {
         const errorMessage = error.message;
         console.log(errorMessage);
       });
+    Analytics.setUserId(signup_uid)
+    Analytics.setCurrentScreen("Sign Up Page");
   }
 
   return (

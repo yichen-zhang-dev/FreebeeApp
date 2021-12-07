@@ -73,12 +73,12 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   var uri;
 
   const types = [
-    "food",
-    "phone accessories",
-    "t-shirt",
-    "bag",
-    "hand-sanitizer",
-    "other",
+    "Food",
+    "Phone Accessories",
+    "Shirt",
+    "Bag",
+    "Hand Sanitizer",
+    "Other",
   ];
   const locations = [
     "Your Location",
@@ -87,7 +87,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     "Burger Bowl",
     "College of Computing",
     "CRC",
-    "Crossland",
+    "Crosland",
     "CULC",
     "GT Connector",
     "Klaus",
@@ -162,9 +162,9 @@ export default function AddGiveawayForm({ route, navigation, db }) {
   };
 
   async function handleSubmission() {
-    if (date < new Date()) {
-      console.log("Invalid date!");
-    }
+    // if (date < new Date()) {
+    //   console.log("Invalid date!");
+    // }
 
     if (giveawayType === "" || giveawayLocation === "") {
       console.log("Empty mandatory fields!");
@@ -179,6 +179,45 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     } else if (giveawayLocation === "CRC") {
       latitude = 33.77560635846814;
       longitude = -84.40390882992358;
+    } else if (giveawayLocation === "Bill Moore") {
+      latitude = 33.772571174440984;
+      longitude = -84.39408427530708;
+    } else if (giveawayLocation === "Bio Quad") {
+      latitude = 33.77945348062658;
+      longitude = -84.39670307530695;
+    } else if (giveawayLocation === "Burger Bowl") {
+      latitude = 33.77848626616058; 
+      longitude = -84.40321983853457;
+    } else if (giveawayLocation === "GT Connector") {
+      latitude = 33.77391068159167;
+      longitude = -84.39126514461915;
+    } else if (giveawayLocation === "Crosland") {
+      latitude = 33.77437746241468;
+      longitude = -84.39500674461914;
+    } else if (giveawayLocation === "Klaus") {
+      latitude = 33.777287799050264;
+      longitude = -84.39583655996303;
+    } else if (giveawayLocation === "North Ave Dining") {
+      latitude = 33.771296117139975;
+      longitude = -84.39162070414308;
+    } else if (giveawayLocation === "Price Gilbert Library") {
+      latitude = 33.77452117105313;
+      longitude = -84.39581358694714;
+    } else if (giveawayLocation === "Skiles Walkway") {
+      latitude = 33.774199180931014;
+      longitude = -84.39690674461914;
+    } else if (giveawayLocation === "Student Center") {
+      latitude = 33.77397647903699;
+      longitude = -84.39875396744728;
+    } else if (giveawayLocation === "Tech Tower") {
+      latitude = 33.77253541124392;
+      longitude = -84.39474008879915;
+    } else if (giveawayLocation === "West Village") {
+      latitude = 33.77976032106911;
+      longitude = -84.40460844276716;
+    } else if (giveawayLocation === "College of Computing") {
+      latitude = 33.777915343014485;
+      longitude = -84.39730897345505;
     } else {
       latitude = currLatitude;
       longitude = currLongitude;

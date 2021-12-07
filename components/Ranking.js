@@ -10,7 +10,8 @@ import * as Analytics from "expo-firebase-analytics";
 
 export default function Ranking({ db }) {
   const [users, setUsers] = useState({});
-
+  Analytics.setCurrentScreen("User Ranking");
+  Analytics.logEvent("Viewing leaderboard");
   useEffect(() => {
     db.collection("userprofile").onSnapshot((querySnapshot) => {
       let topUsers = [];
@@ -30,7 +31,7 @@ export default function Ranking({ db }) {
   }, []);
 
   const renderUser = (user) => {
-    Analytics.setCurrentScreen("User Ranking");
+    
     const colors = ["#0e7049", "#3c8a5d", "#60a472", "#7BBA83"];
     const color = user.index < 3 ? colors[user.index] : colors[3];
     return (

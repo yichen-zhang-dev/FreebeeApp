@@ -17,7 +17,7 @@ export default class CustomMapView extends Component {
       coordinates: [],
       markers: [],
     };
-    Analytics.setCurrentScreen("Custom Map View");
+    
   }
 
   needsLocationChange(locationSet, loc) {
@@ -89,6 +89,8 @@ export default class CustomMapView extends Component {
   componentDidMount() {
     this.setState({ ready: false });
     this.populateData();
+    Analytics.setCurrentScreen("Custom Map View");
+    Analytics.logEvent("MapView");
   }
 
   geoSuccess = (position) => {
@@ -111,6 +113,7 @@ export default class CustomMapView extends Component {
       .catch((error) => {
         console.error("Error removing document: ", error);
       });
+    alert("Removing Giveaway");
   };
 
   goToMyLoc = () => {
