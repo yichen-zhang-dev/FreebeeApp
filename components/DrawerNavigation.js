@@ -57,18 +57,19 @@ const AddSubmissionNavigationListView = ({ navigation, db }) => {
   );
 };
 
-const AddSubmissionSuccessNavigation = () => {
+const AddSubmissionSuccessNavigation = ({ db }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="AddSubmission"
-        component={AddSubmission}
         options={{
           title: "Submission Rewards",
           headerBackVisible: false,
           gestureEnabled: false,
         }}
-      />
+      >
+        {(props) => <AddSubmission {...props} db={db} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };
@@ -117,13 +118,14 @@ export default function DrawerNavigation({ db }) {
       </Drawer.Screen>
       <Drawer.Screen
         name="Submission"
-        component={AddSubmissionSuccessNavigation}
         options={{
           drawerItemStyle: { height: 0 },
           headerShown: false,
           swipeEnabled: false,
         }}
-      />
+      >
+        {(props) => <AddSubmissionSuccessNavigation {...props} db={db} />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 }

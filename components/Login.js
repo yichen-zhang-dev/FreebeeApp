@@ -37,15 +37,15 @@ export default function Login({ navigation, db }) {
         const user = userCredential.user;
         const userID = user.uid;
         navigation.navigate("Home");
-        console.log(userID);
-        var docRef = db.collection("userprofile").doc(userID);
-        docRef.get().then((doc) => {
-          if (doc.exists) {
-            global.eventPlanner = true;
-          } else {
-            console.log("No such document!");
-          }
-        });
+        // console.log(userID);
+        // var docRef = db.collection("userprofile").doc(userID);
+        // docRef.get().then((doc) => {
+        //   if (doc.exists) {
+        //     global.eventPlanner = true;
+        //   } else {
+        //     console.log("No such document!");
+        //   }
+        // });
       })
       .catch((error) => {
         const errorCode = error.code;

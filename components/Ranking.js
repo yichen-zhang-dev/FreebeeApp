@@ -12,20 +12,22 @@ export default function Ranking({ db }) {
   const [users, setUsers] = useState({});
 
   useEffect(() => {
-    db.collection("userprofile")
-      .get()
-      .then((querySnapshot) => {
-        let topUsers = [];
-        querySnapshot.forEach((doc) => {
-          let name = doc.data().first_name + " " + doc.data().last_name;
-          let points = doc.data().points;
-          topUsers.push({ name: name, points: points });
-        });
-        topUsers.sort(function (a, b) {
-          return b.points - a.points;
-        });
-        setUsers(topUsers);
+    db.collection("userprofile").onSnapshot((querySnapshot) => {
+      let topUsers = [];
+      querySnapshot.forEach((doc) => {
+        let name = doc.data().first_name + " " + doc.data().last_name;
+        let points = doc.data().points;
+        topUsers.push({ name: name, points: points });
       });
+      topUsers = topUsers.filter(function (user) {
+        return !isNaN(user.points);
+      });
+      topUsers.sort(function (a, b) {
+        return b.points - a.points;
+      });
+      console.log(topUsers);
+      setUsers(topUsers);
+    });
   }, []);
 
   const renderUser = (user) => {
@@ -42,7 +44,9 @@ export default function Ranking({ db }) {
         <Text style={styles.userName}>
           {user.index + 1 + ". " + user.item.name}
         </Text>
-        <Text style={styles.userPoints}>{user.item.points + "pt"}</Text>
+        <View style={{ alignItems: "flex-end", flex: 1 }}>
+          <Text style={styles.userPoints}>{user.item.points + "pt"}</Text>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   userName: {
-    flex: 5,
+    flex: 4,
     fontSize: 20,
     color: "white",
   },
