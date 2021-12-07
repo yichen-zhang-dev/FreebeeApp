@@ -1,12 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 import Header from "./Header";
 
-import * as Analytics from 'expo-firebase-analytics';
+import * as Analytics from "expo-firebase-analytics";
+import { login_uid } from "./Login.js";
+import { signup_uid } from "./SignUp.js";
 
-
-export default function AddSubmission({ navigation }) {
+export default function AddSubmission({ navigation, db }) {
   Analytics.setCurrentScreen("User Add Submission");
+
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    let curr_points;
+    if (login_uid != undefined) {
+      db.collection("userprofile")
+        .doc(login_uid)
+        .get()
+        .then((doc) => {
+          console.log("here");
+          curr_points = doc.data().points;
+          setPoints(curr_points);
+        });
+    }
+    if (signup_uid != undefined) {
+      db.collection("userprofile")
+        .doc(signup_uid)
+        .get()
+        .then((doc) => {
+          curr_points = doc.data().points;
+          setPoints(curr_points);
+        });
+    }
+  });
+
   return (
     <View style={styles.container}>
       <Header />
@@ -17,8 +44,8 @@ export default function AddSubmission({ navigation }) {
           </Text>
         </View>
         <View style={{ flex: 2, justifyContent: "flex-start" }}>
-          <Text style={styles.scoreText}>YOU WIN 5 POINTS</Text>
-          <Text style={styles.scoreText}>YOUR CURRENT SCORE: 25</Text>
+          <Text style={styles.scoreText}>YOU WON 5 POINTS</Text>
+          <Text style={styles.scoreText}>YOUR CURRENT SCORE: {points}</Text>
         </View>
         <View
           style={{

@@ -311,9 +311,7 @@ export default function AddGiveawayForm({ route, navigation, db }) {
           /> */}
         </View>
         {!global.eventPlanner && (
-          <View
-            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-          >
+          <View style={{ flex: 1, alignItems: "center", paddingTop: 13 }}>
             <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
             <Button title="Upload Photo" onPress={PickImage} />
             {image && (
