@@ -17,9 +17,11 @@ export default class CustomMapView extends Component {
       longitude: 0,
       coordinates: [],
       markers: [],
+      url: ""
     };
     Analytics.setCurrentScreen("Custom Map View");
   }
+
 
   needsLocationChange(locationSet, loc) {
     for (let loc1 of locationSet) {
@@ -90,8 +92,9 @@ export default class CustomMapView extends Component {
 
   async getImage(giveawayId) {
     const ref = firebase.storage().ref("images/" + giveawayId);
-    const storage_url = await ref.getDownloadURL();
+    storage_url = await ref.getDownloadURL();
     //storage_url holds the url to the image - display this variable in image comp in html
+    this.setState({ url: storage_url });
     console.log(storage_url)
   }
   
