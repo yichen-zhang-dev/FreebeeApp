@@ -10,34 +10,39 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 // import { faMap } from '@fortawesome/free-solid-svg-icons';
-import * as Analytics from 'expo-firebase-analytics';
+import * as Analytics from "expo-firebase-analytics";
 import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useToast } from "react-native-toast-notifications";
 
 import firebase from "firebase";
 
-export default function Login({ navigation , db }) {
+var login_uid;
+
+export { login_uid };
+
+export default function Login({ navigation, db }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const toast = useToast();
-  
+
   Analytics.setCurrentScreen("Login");
   function handleLogin() {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
+        login_uid = firebase.auth().currentUser.uid;
+        console.log("login uid " + login_uid);
         const user = userCredential.user;
         const userID = user.uid;
         navigation.navigate("Home");
         console.log(userID);
         var docRef = db.collection("userprofile").doc(userID);
-        docRef.get().then( (doc) => {
+        docRef.get().then((doc) => {
           if (doc.exists) {
             global.eventPlanner = true;
-          }
-          else {
+          } else {
             console.log("No such document!");
           }
         });
@@ -54,7 +59,7 @@ export default function Login({ navigation , db }) {
         });
       });
   }
-  
+
   return (
     <View style={styles.container}>
       <Modal

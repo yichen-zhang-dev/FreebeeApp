@@ -14,6 +14,10 @@ import { faMap, faUser } from "@fortawesome/free-solid-svg-icons";
 import * as Analytics from "expo-firebase-analytics";
 import firebase from "firebase";
 
+var signup_uid;
+
+export { signup_uid };
+
 export default function Login({ navigation, db }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,13 +35,13 @@ export default function Login({ navigation, db }) {
       .then((userCredential) => {
         const user = userCredential.user;
         navigation.navigate("Home");
-        const uid = firebase.auth().currentUser.uid;
+        signup_uid = firebase.auth().currentUser.uid;
         console.log(viewModeListView);
         var mode = "Map View";
         if (!viewModeListView) {
           mode = "List View";
         }
-        db.collection("userprofile").doc(uid).set({
+        db.collection("userprofile").doc(signup_uid).set({
           first_name: fname,
           last_name: lname,
           email: email,

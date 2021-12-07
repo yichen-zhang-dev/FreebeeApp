@@ -15,6 +15,9 @@ import Header from "./Header";
 import * as ImagePicker from "expo-image-picker";
 import * as Analytics from "expo-firebase-analytics";
 import * as Location from "expo-location";
+import firebase from "firebase";
+import { login_uid } from "./Login.js";
+import { signup_uid } from "./SignUp.js";
 
 export default function AddGiveawayForm({ route, navigation, db }) {
   const [date, setDate] = useState(new Date());
@@ -58,13 +61,15 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     setMode(currentMode);
   };
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
     setCounter(0);
   };
 
   const showTimepicker = () => {
-    showMode('time');
+    showMode("time");
   };
+
+  var uri;
 
   const types = [
     "food",
@@ -122,11 +127,25 @@ export default function AddGiveawayForm({ route, navigation, db }) {
     });
 
     if (!result.cancelled) {
+      uri = result.uri;
       setImage(result.uri);
+      this.uploadImage(result.uri, "test-image")
+        .then(() => {})
+        .catch((error) => {});
     }
   };
 
-  function handleSubmission() {
+  uploadImage = async (uri, imageName) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    var ref = firebase
+      .storage()
+      .ref()
+      .child("images/" + imageName);
+    ref.put(blob);
+  };
+
+  async function handleSubmission() {
     if (date < new Date()) {
       console.log("Invalid date!");
     }
@@ -173,11 +192,30 @@ export default function AddGiveawayForm({ route, navigation, db }) {
       });
     }
 
+    var userprofiledoc;
+    var curr_points;
+    var new_points;
+    if (login_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(login_uid).get();
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(login_uid).update({
+        points: new_points,
+      });
+    }
+    if (signup_uid != undefined) {
+      userprofiledoc = await db.collection("userprofile").doc(signup_uid).get();
+      var curr_points = userprofiledoc.data().points;
+      var new_points = curr_points + 5;
+      db.collection("userprofile").doc(signup_uid).update({
+        points: new_points,
+      });
+    }
+
     navigation.navigate("Submission");
   }
-  
+
   return (
-    
     <View style={styles.container}>
       <Header />
       <View style={{ flex: 5 }}>
@@ -217,17 +255,18 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             </Text>
             <Button onPress={showDatepicker} title="Pick a Date!" />
             {show && (
-            <DateTimePicker
-              value={date}
-              mode={mode}
-              display="default"
-              onChange={onChange}
-              style={{
-                width: 150,
-                alignSelf: "center",
-                marginLeft: 30,
-              }}
-            /> )}
+              <DateTimePicker
+                value={date}
+                mode={mode}
+                display="default"
+                onChange={onChange}
+                style={{
+                  width: 150,
+                  alignSelf: "center",
+                  marginLeft: 30,
+                }}
+              />
+            )}
             {/* <Button onPress={showTimepicker} title="Pick a Time!" />
             {show && (
             <DateTimePicker
@@ -241,8 +280,6 @@ export default function AddGiveawayForm({ route, navigation, db }) {
                 marginLeft: 30,
               }}
             /> )} */}
-  
-
           </View>
         )}
         <View style={styles.dropdownContainer}>
@@ -273,29 +310,31 @@ export default function AddGiveawayForm({ route, navigation, db }) {
             buttonStyle={{ borderWidth: 1, borderRadius: 8 }}
           /> */}
         </View>
-        {!global.eventPlanner && (<View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
-          <Button title="Upload Photo" onPress={PickImage} />
-          {image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
-            />
-          )}
-        </View>
+        {!global.eventPlanner && (
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            <Text style={styles.dropdownTitle}>Photo of Giveaway Item:</Text>
+            <Button title="Upload Photo" onPress={PickImage} />
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 200, height: 200 }}
+              />
+            )}
+          </View>
         )}
         {global.eventPlanner && (
           <View style={styles.container}>
-          <Text style={styles.dropdownTitle}>
+            <Text style={styles.dropdownTitle}>
               Info about giveaway: <Text style={{ color: "red" }}>*</Text>
             </Text>
-          <TextInput style={styles.textForm}
+            <TextInput
+              style={styles.textForm}
               multiline={true}
               numberOfLines={4}
               onChangeText={(text) => setClubInfo(text)}
-              />
+            />
           </View>
         )}
       </View>
@@ -344,5 +383,5 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     width: 300,
     height: 100,
-  }
+  },
 });
