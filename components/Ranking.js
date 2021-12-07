@@ -21,9 +21,13 @@ export default function Ranking({ db }) {
           let points = doc.data().points;
           topUsers.push({ name: name, points: points });
         });
+        topUsers = topUsers.filter(function (user) {
+          return !isNaN(user.points);
+        });
         topUsers.sort(function (a, b) {
           return b.points - a.points;
         });
+        console.log(topUsers);
         setUsers(topUsers);
       });
   }, []);
