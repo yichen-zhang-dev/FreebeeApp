@@ -89,8 +89,8 @@ export default class CustomMapView extends Component {
   componentDidMount() {
     this.setState({ ready: false });
     this.populateData();
-    Analytics.setCurrentScreen("Custom Map View");
-    Analytics.logEvent("MapView");
+    // Analytics.setCurrentScreen("Custom Map View");
+    // Analytics.logEvent("MapView");
   }
 
   geoSuccess = (position) => {
@@ -129,24 +129,24 @@ export default class CustomMapView extends Component {
   render() {
     const dateText = (marker) => {
       if (typeof marker.startTime !== "undefined") {
-        if (typeof marker.endTime !== "undefined" && marker.endTime !== null) {
+        if (typeof marker.endTime !== "undefined" ? marker.endTime !== null : null) {
           return (
             <View>
-              {"date: " +
-                new Date(marker.startTime.seconds * 1000).toDateString()}
-              {"\nstart time: " +
-                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()}
-              {"\nend time: " +
-                new Date(marker.endTime.seconds * 1000).toLocaleTimeString()}
+              {<Text>"date: " +
+                new Date(marker.startTime.seconds * 1000).toDateString()</Text>}
+              {<Text>"\nstart time: " +
+                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()</Text>}
+              {<Text>"\nend time: " +
+                new Date(marker.endTime.seconds * 1000).toLocaleTimeString()</Text>}
             </View>
           );
         } else {
           return (
             <Text>
-              {"date: " +
-                new Date(marker.startTime.seconds * 1000).toDateString()}
-              {"\nstart time: " +
-                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()}
+              { <Text>"date: " +
+                new Date(marker.startTime.seconds * 1000).toDateString() </Text> }
+              {<Text>"\nstart time: " +
+                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()</Text>}
             </Text>
           );
           // }
