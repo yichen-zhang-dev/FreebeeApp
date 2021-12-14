@@ -17,7 +17,6 @@ export default class CustomMapView extends Component {
       coordinates: [],
       markers: [],
     };
-    
   }
 
   needsLocationChange(locationSet, loc) {
@@ -129,24 +128,30 @@ export default class CustomMapView extends Component {
   render() {
     const dateText = (marker) => {
       if (typeof marker.startTime !== "undefined") {
-        if (typeof marker.endTime !== "undefined" ? marker.endTime !== null : null) {
+        if (
+          typeof marker.endTime !== "undefined" ? marker.endTime !== null : null
+        ) {
           return (
             <View>
-              {<Text>"date: " +
-                new Date(marker.startTime.seconds * 1000).toDateString()</Text>}
-              {<Text>"\nstart time: " +
-                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()</Text>}
-              {<Text>"\nend time: " +
-                new Date(marker.endTime.seconds * 1000).toLocaleTimeString()</Text>}
+              <Text>
+                {"date: " +
+                  new Date(marker.startTime.seconds * 1000).toDateString()}
+                {"\nstart time: " +
+                  new Date(
+                    marker.startTime.seconds * 1000
+                  ).toLocaleTimeString()}
+                {"\nend time: " +
+                  new Date(marker.endTime.seconds * 1000).toLocaleTimeString()}
+              </Text>
             </View>
           );
         } else {
           return (
             <Text>
-              { <Text>"date: " +
-                new Date(marker.startTime.seconds * 1000).toDateString() </Text> }
-              {<Text>"\nstart time: " +
-                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()</Text>}
+              {"date: " +
+                new Date(marker.startTime.seconds * 1000).toDateString()}
+              {"\nstart time: " +
+                new Date(marker.startTime.seconds * 1000).toLocaleTimeString()}
             </Text>
           );
           // }
